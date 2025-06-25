@@ -1,0 +1,18 @@
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Get '1': ONE
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Contains '2': true
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Size: 3
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - ---- Hash Table Visualization ----
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 0: [Key=2, Value=TWO] -> null
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 1: [Key=3, Value=THREE] -> null
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 2: empty
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 3: empty
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 4: empty
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 5: empty
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 6: empty
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 7: empty
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 8: empty
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Bucket 9: [Key=1, Value=ONE] -> null
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - ---- End of Table ----
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - After removing '2', contains? false
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Size after removal: 2
+2025-06-16 11:08:41 [main] INFO  org.example.MyHashTable - Is empty after clear? true

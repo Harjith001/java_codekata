@@ -1,0 +1,3 @@
+2025-06-19 12:04:45 [main] INFO  org.example.FileIO - Object Person is serialized
+2025-06-19 12:04:45 [main] INFO  org.example.FileIO - org.example.Serial$Person@7e985ce9
+2025-06-19 12:04:51 [main] ERROR org.example.FileIO - File IO exception
