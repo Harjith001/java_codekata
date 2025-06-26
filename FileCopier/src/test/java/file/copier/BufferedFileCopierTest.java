@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class BufferedFileCopierTest {
@@ -48,6 +50,17 @@ class BufferedFileCopierTest {
         int bufferSize = 4096;
         BufferedFileCopier bf = new BufferedFileCopier(bufferSize);
         long time = bf.copy(sourceFile.toString(), destFile.toString());
-        System.out.println(time);
+        System.out.println("Copy time (nanoseconds): " + time);
+
+        // ✅ Step 1: Check if destination file exists
+        assertTrue(Files.exists(destFile), "Destination file should exist after copying.");
+
+        // ✅ Step 2: Read both files
+        byte[] sourceBytes = Files.readAllBytes(sourceFile);
+        byte[] destBytes = Files.readAllBytes(destFile);
+
+        // ✅ Step 3: Compare contents
+        assertArrayEquals(sourceBytes, destBytes, "Files should be identical after copy.");
     }
+
 }

@@ -7,6 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class FileStreamCopierTest {
 
     private static Path tempDir;
@@ -46,12 +49,25 @@ class FileStreamCopierTest {
     void copyWithDifferentSizes() throws IOException {
         int size = 4096;
 
-
         FileStreamCopier fs1 = new FileStreamCopier(size);
+
         long time = fs1.copyWithoutBuffer(sourceFile.toString(), destFile.toString());
-        System.out.println("File stream without byte array size : "+ time);
+        System.out.println("File stream without byte array size : " + time);
+
+        assertTrue(Files.exists(destFile), "Destination file should exist after copyWithoutBuffer");
+
+        byte[] sourceBytes = Files.readAllBytes(sourceFile);
+        byte[] destBytes = Files.readAllBytes(destFile);
+        assertArrayEquals(sourceBytes, destBytes, "Files should be equal after copyWithoutBuffer");
+
+        Files.delete(destFile);
 
         time = fs1.copy(sourceFile.toString(), destFile.toString());
-        System.out.println("File stream with byte array size 4096 : "+ time);
+        System.out.println("File stream with byte array size 4096 : " + time);
+
+        assertTrue(Files.exists(destFile), "Destination file should exist after copy");
+
+        destBytes = Files.readAllBytes(destFile);
+        assertArrayEquals(sourceBytes, destBytes, "Files should be equal after buffered copy");
     }
 }

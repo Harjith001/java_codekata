@@ -21,7 +21,7 @@ public class FileStreamCopier implements FileCopier{
             int data;
             byte[] buffer = new byte[byteArraySize];
             while ((data = fis.read(buffer)) != -1) {
-                fos.write(data);
+                fos.write(buffer, 0, data);
             }
         }
 

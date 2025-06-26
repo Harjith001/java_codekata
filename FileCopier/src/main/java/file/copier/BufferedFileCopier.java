@@ -21,7 +21,7 @@ public class BufferedFileCopier implements FileCopier{
             byte[] buffer = new byte[bufferSize];
             int bytesRead;
             while ((bytesRead = bis.read(buffer)) != -1) {
-                bos.write(bytesRead);
+                bos.write(buffer, 0, bytesRead);
             }
         }
         long end = System.nanoTime();
