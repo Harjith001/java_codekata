@@ -1,6 +1,7 @@
 package directory.traversal;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -8,13 +9,13 @@ import java.util.function.Predicate;
 public class DirectoryTraversal extends DirectoryAbstract {
 
     @Override
-    public List<String> listFiles(String directory, String extension) {
+    public List<Path> listFiles(Path directory, String extension) {
         return traverseAndCollect(directory,
                 file -> file.getName().toLowerCase().endsWith(extension.toLowerCase()));
     }
 
     @Override
-    public List<String> findContent(String directory, String content) {
+    public List<Path> findContent(Path directory, String content) {
         return traverseAndCollect(directory, file -> containsKeyword(file, content));
     }
 

@@ -1,14 +1,15 @@
 package directory.traversal;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class DirectoryAbstract implements DirectoryOperations {
-    protected List<String> traverseAndCollect(String directory, Predicate<File> filter) {
-        List<String> result = new ArrayList<>();
-        File baseDir = new File(directory);
+    protected List<Path> traverseAndCollect(Path directory, Predicate<File> filter) {
+        List<Path> result = new ArrayList<>();
+        File baseDir = new File(directory.toUri());
 
         if (!baseDir.exists() || !baseDir.isDirectory()) {
             return result;
@@ -27,7 +28,7 @@ public abstract class DirectoryAbstract implements DirectoryOperations {
                 if (file.isDirectory()) {
                     queue.add(file);
                 } else if (file.isFile() && filter.test(file)) {
-                    result.add(file.getAbsolutePath());
+                    result.add(file.toPath());
                 }
             }
         }

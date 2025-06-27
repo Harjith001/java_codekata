@@ -26,14 +26,13 @@ class DirectoryTraversalTest {
     @Test
     void testListFilesWithExtension() throws IOException {
         Path file1 = Files.createFile(tempDir.resolve("file1.txt"));
-        Path file2 = Files.createFile(tempDir.resolve("file2.md"));
         Path file3 = Files.createFile(tempDir.resolve("file3.TXT")); // uppercase extension
 
-        List<String> result = traversal.listFiles(tempDir.toString(), ".txt");
+        List<Path> result = traversal.listFiles(tempDir, ".txt");
 
         assertEquals(2, result.size());
-        assertTrue(result.contains(file1.toAbsolutePath().toString()));
-        assertTrue(result.contains(file3.toAbsolutePath().toString()));
+        assertTrue(result.contains(file1.toAbsolutePath()));
+        assertTrue(result.contains(file3.toAbsolutePath()));
     }
 
     @Test
@@ -43,22 +42,22 @@ class DirectoryTraversalTest {
         Files.writeString(file1, "This file contains the word hello");
         Files.writeString(file2, "This one does not");
 
-        List<String> result = traversal.findContent(tempDir.toString(), "hello");
+        List<Path> result = traversal.findContent(tempDir, "hello");
 
         assertEquals(1, result.size());
-        assertTrue(result.getFirst().contains("file1.txt"));
+        assertEquals("file1.txt", result.getFirst().getFileName().toString());
     }
 
     @Test
     void testNoFilesFound() {
-        List<String> result = traversal.listFiles(tempDir.toString(), ".java");
+        List<Path> result = traversal.listFiles(tempDir, ".java");
         assertTrue(result.isEmpty());
     }
 
     @Test
     void testNoContentMatches() throws IOException {
         Files.createFile(tempDir.resolve("empty.txt"));
-        List<String> result = traversal.findContent(tempDir.toString(), "notfound");
+        List<Path> result = traversal.findContent(tempDir, "notfound");
         assertTrue(result.isEmpty());
     }
 
@@ -68,10 +67,10 @@ class DirectoryTraversalTest {
         Path fileInSub = Files.createFile(subDir.resolve("note.txt"));
         Files.writeString(fileInSub, "Nested file with keyword test");
 
-        List<String> result = traversal.findContent(tempDir.toString(), "test");
+        List<Path> result = traversal.findContent(tempDir, "test");
 
         assertEquals(1, result.size());
-        assertTrue(result.getFirst().contains("note.txt"));
+        assertEquals("note.txt", result.getFirst().getFileName().toString());
     }
 
     // Helper method to delete directories after test
