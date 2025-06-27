@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public abstract class DirectoryAbstract {
+public abstract class DirectoryAbstract implements DirectoryOperations {
     protected List<String> traverseAndCollect(String directory, Predicate<File> filter) {
         List<String> result = new ArrayList<>();
         File baseDir = new File(directory);

@@ -49,7 +49,7 @@ class BufferedFileCopierTest {
     void copy() throws IOException {
         int bufferSize = 4096;
         BufferedFileCopier bf = new BufferedFileCopier(bufferSize);
-        long time = bf.copy(sourceFile.toString(), destFile.toString());
+        long time = bf.copy(sourceFile.toFile(), destFile.toFile());
         System.out.println("Copy time (nanoseconds): " + time);
 
         // ✅ Step 1: Check if destination file exists

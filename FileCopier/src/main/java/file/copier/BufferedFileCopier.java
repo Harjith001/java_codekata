@@ -11,7 +11,7 @@ public class BufferedFileCopier implements FileCopier{
     }
 
     @Override
-    public long copy(String source, String dest) throws IOException {
+    public long copy(File source, File dest) throws IOException {
 
         long start = System.nanoTime();
 

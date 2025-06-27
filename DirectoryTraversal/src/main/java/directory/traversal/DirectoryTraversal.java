@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class DirectoryTraversal extends DirectoryAbstract implements DirectoryOperations {
+public class DirectoryTraversal extends DirectoryAbstract {
 
     @Override
     public List<String> listFiles(String directory, String extension) {

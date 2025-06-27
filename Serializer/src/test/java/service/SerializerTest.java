@@ -29,7 +29,7 @@ public class SerializerTest {
     }
 
     @Test
-    void testBinarySerializationAndDeserialization() throws Exception {
+    void testSerializationAndDeserialization() throws Exception {
         Serializer<Person> serializer = SerializerFactory.getSerializer(SerializerType.OBJECT);
         serializer.serialize(testPerson, binaryFile);
 

@@ -25,4 +25,14 @@ public class Person implements Serializable {
     public String toString() {
         return "Person{name='%s', age=%d, address='%s'}".formatted(name, age, address);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

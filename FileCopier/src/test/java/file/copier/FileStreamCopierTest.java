@@ -49,9 +49,10 @@ class FileStreamCopierTest {
     void copyWithDifferentSizes() throws IOException {
         int size = 4096;
 
-        FileStreamCopier fs1 = new FileStreamCopier(size);
+        FileStreamCopier fs1 = new FileStreamCopier(size); //buffered version
+        FileStreamCopier fs2 = new FileStreamCopier(); //unbuffered
 
-        long time = fs1.copyWithoutBuffer(sourceFile.toString(), destFile.toString());
+        long time = fs2.copy(sourceFile.toFile(), destFile.toFile());
         System.out.println("File stream without byte array size : " + time);
 
         assertTrue(Files.exists(destFile), "Destination file should exist after copyWithoutBuffer");
@@ -62,7 +63,7 @@ class FileStreamCopierTest {
 
         Files.delete(destFile);
 
-        time = fs1.copy(sourceFile.toString(), destFile.toString());
+        time = fs1.copy(sourceFile.toFile(), destFile.toFile());
         System.out.println("File stream with byte array size 4096 : " + time);
 
         assertTrue(Files.exists(destFile), "Destination file should exist after copy");
