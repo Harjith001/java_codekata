@@ -2,6 +2,7 @@ package config;
 import java.io.*;
 import java.util.Properties;
 
+
 public class PropertiesConfig implements ConfigReader, ConfigWriter {
     @Override
     public Properties readConfig(String filePath) throws IOException {
@@ -11,6 +12,7 @@ public class PropertiesConfig implements ConfigReader, ConfigWriter {
         }
         return props;
     }
+
 
     @Override
     public void writeConfig(String filePath, Properties props) throws IOException {

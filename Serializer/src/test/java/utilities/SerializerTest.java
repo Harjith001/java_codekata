@@ -1,4 +1,4 @@
-package service;
+package utilities;
 
 import factory.SerializerFactory;
 import factory.SerializerType;

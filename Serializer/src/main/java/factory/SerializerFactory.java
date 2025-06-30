@@ -1,8 +1,8 @@
 package factory;
 
-import service.FileSerializer;
-import service.JsonSerializer;
-import service.Serializer;
+import utilities.FileSerializer;
+import utilities.JsonSerializer;
+import utilities.Serializer;
 
 import java.io.Serializable;
 

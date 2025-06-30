@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,11 +29,13 @@ class DirectoryTraversalTest {
         Path file1 = Files.createFile(tempDir.resolve("file1.txt"));
         Path file3 = Files.createFile(tempDir.resolve("file3.TXT")); // uppercase extension
 
-        List<Path> result = traversal.listFiles(tempDir, ".txt");
+        try (Stream<Path> resultStream = traversal.listFiles(tempDir, ".txt")) {
+            List<Path> result = resultStream.map(Path::toAbsolutePath).toList();
 
-        assertEquals(2, result.size());
-        assertTrue(result.contains(file1.toAbsolutePath()));
-        assertTrue(result.contains(file3.toAbsolutePath()));
+            assertEquals(2, result.size());
+            assertTrue(result.contains(file1.toAbsolutePath()));
+            assertTrue(result.contains(file3.toAbsolutePath()));
+        }
     }
 
     @Test
@@ -42,23 +45,28 @@ class DirectoryTraversalTest {
         Files.writeString(file1, "This file contains the word hello");
         Files.writeString(file2, "This one does not");
 
-        List<Path> result = traversal.findContent(tempDir, "hello");
+        try (Stream<Path> resultStream = traversal.findContent(tempDir, "hello")) {
+            List<Path> result = resultStream.toList();
 
-        assertEquals(1, result.size());
-        assertEquals("file1.txt", result.getFirst().getFileName().toString());
+            assertEquals(1, result.size());
+            assertEquals("file1.txt", result.getFirst().getFileName().toString());
+        }
     }
 
     @Test
     void testNoFilesFound() {
-        List<Path> result = traversal.listFiles(tempDir, ".java");
-        assertTrue(result.isEmpty());
+        try (Stream<Path> resultStream = traversal.listFiles(tempDir, ".java")) {
+            assertTrue(resultStream.findAny().isEmpty());
+        }
     }
 
     @Test
     void testNoContentMatches() throws IOException {
         Files.createFile(tempDir.resolve("empty.txt"));
-        List<Path> result = traversal.findContent(tempDir, "notfound");
-        assertTrue(result.isEmpty());
+
+        try (Stream<Path> resultStream = traversal.findContent(tempDir, "notfound")) {
+            assertTrue(resultStream.findAny().isEmpty());
+        }
     }
 
     @Test
@@ -67,10 +75,12 @@ class DirectoryTraversalTest {
         Path fileInSub = Files.createFile(subDir.resolve("note.txt"));
         Files.writeString(fileInSub, "Nested file with keyword test");
 
-        List<Path> result = traversal.findContent(tempDir, "test");
+        try (Stream<Path> resultStream = traversal.findContent(tempDir, "test")) {
+            List<Path> result = resultStream.toList();
 
-        assertEquals(1, result.size());
-        assertEquals("note.txt", result.getFirst().getFileName().toString());
+            assertEquals(1, result.size());
+            assertEquals("note.txt", result.getFirst().getFileName().toString());
+        }
     }
 
     // Helper method to delete directories after test

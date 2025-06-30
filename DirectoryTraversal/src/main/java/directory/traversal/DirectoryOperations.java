@@ -1,7 +1,7 @@
 package directory.traversal;
 
 import java.nio.file.Path;
-import java.util.List;
+import java.util.stream.Stream;
 
 
 public interface DirectoryOperations {
@@ -14,7 +14,7 @@ public interface DirectoryOperations {
      * @param extension     Extension to search e.g. - .txt, .html
      * @return      List of file names
      */
-    List<Path> listFiles(Path directory, String extension);
+    Stream<Path> listFiles(Path directory, String extension);
 
-    List<Path> findContent(Path directory, String content);
+    Stream<Path> findContent(Path directory, String content);
 }
