@@ -83,7 +83,6 @@ class DirectoryTraversalTest {
         }
     }
 
-    // Helper method to delete directories after test
     private void deleteRecursively(File file) {
         File[] allContents = file.listFiles();
         if (allContents != null) {

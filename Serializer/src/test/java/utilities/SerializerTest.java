@@ -7,14 +7,20 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SerializerTest {
 
     private Person testPerson;
-    private final String binaryFile = "test_person.ser";
+    private final String objectFile = "test_person.ser";
     private final String jsonFile = "test_person.json";
 
     @BeforeEach
@@ -24,16 +30,16 @@ public class SerializerTest {
 
     @AfterEach
     void tearDown() {
-        new File(binaryFile).delete();
+        new File(objectFile).delete();
         new File(jsonFile).delete();
     }
 
     @Test
     void testSerializationAndDeserialization() throws Exception {
         Serializer<Person> serializer = SerializerFactory.getSerializer(SerializerType.OBJECT);
-        serializer.serialize(testPerson, binaryFile);
+        serializer.serialize(testPerson, objectFile);
 
-        Person deserializedPerson = serializer.deserialize(binaryFile, Person.class);
+        Person deserializedPerson = serializer.deserialize(objectFile, Person.class);
 
         assertNotNull(deserializedPerson);
         assertEquals(testPerson.getName(), deserializedPerson.getName());
@@ -63,5 +69,23 @@ public class SerializerTest {
         });
 
         assertTrue(exception.getMessage().contains("non_existing_file.json"));
+    }
+
+    @Test
+    void testSerializationWithStreamsOnly() throws Exception {
+        Serializer<Person> serializer = SerializerFactory.getSerializer(SerializerType.OBJECT);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        serializer.serialize(testPerson, outputStream);
+
+        byte[] serializedData = outputStream.toByteArray();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(serializedData);
+
+        Person deserializedPerson = serializer.deserialize(inputStream, Person.class);
+
+        assertNotNull(deserializedPerson);
+        assertEquals(testPerson.getName(), deserializedPerson.getName());
+        assertEquals(testPerson.getAge(), deserializedPerson.getAge());
+        assertEquals(testPerson.getAddress(), deserializedPerson.getAddress());
     }
 }
