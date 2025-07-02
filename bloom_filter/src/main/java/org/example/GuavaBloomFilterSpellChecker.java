@@ -9,8 +9,8 @@ import java.nio.charset.StandardCharsets;
 import org.openjdk.jol.info.GraphLayout;
 
 @SuppressWarnings("UnstableApiUsage")
-public class GuavaBloomFilterSpellChecker {
-    private static  BloomFilter<CharSequence> bloomFilter = null;
+public class GuavaBloomFilterSpellChecker implements SpellChecker{
+    private static BloomFilter<CharSequence> bloomFilter = null;
     private int wordCount;
 
     public GuavaBloomFilterSpellChecker(int expectedInsertions, double fpp) {
@@ -19,6 +19,7 @@ public class GuavaBloomFilterSpellChecker {
         wordCount = 0;
     }
 
+    @Override
     public void loadDictionary(String dictionaryFilePath) throws Exception {
         try (BufferedReader reader = new BufferedReader(new FileReader(dictionaryFilePath))) {
             String word;
@@ -30,6 +31,7 @@ public class GuavaBloomFilterSpellChecker {
         }
     }
 
+    @Override
     public boolean isWordCorrect(String word) {
         return bloomFilter.mightContain(word.toLowerCase());
     }
