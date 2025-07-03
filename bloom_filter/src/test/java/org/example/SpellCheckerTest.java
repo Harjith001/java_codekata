@@ -4,18 +4,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jol.info.GraphLayout;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SpellCheckerTest {
     private static BloomFilterSpellChecker checker;
-    private static final int bitSetSize = 1_100_000;
+    private static final int bitSetSize = 1_200_000;
     private static final int numHashFunctions = 6;
-    private static final String DICTIONARY_PATH = "/usr/share/dict/words";
 
     @BeforeAll
     public static void setUp() throws Exception {
+        InputStream DICTIONARY_PATH = new FileInputStream("/usr/share/dict/words");
         checker = new BloomFilterSpellChecker(bitSetSize, numHashFunctions);
         checker.loadDictionary(DICTIONARY_PATH);
         System.out.println("Words loaded: " + checker.getWordCount());

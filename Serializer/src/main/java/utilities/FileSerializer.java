@@ -5,9 +5,7 @@ import java.io.*;
 public class FileSerializer<T extends Serializable> implements Serializer<T> {
     @Override
     public void serialize(T obj, String filename) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(obj);
-        }
+        serialize(obj, new FileOutputStream(filename));
     }
 
     @Override

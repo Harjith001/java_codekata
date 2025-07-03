@@ -9,7 +9,7 @@ public class MultiClient {
     public static void main(String[] args) {
         String message = "Hello";
 
-        for (int i = 0; i < 50000; i++) {
+        for (int i = 0; i < 76000; i++) {
             int finalI = i;
             new Thread(() -> {
                 try (Socket socket = new Socket("127.0.0.1", 5001);

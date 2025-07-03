@@ -3,10 +3,13 @@ package file.copier;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ *
+ */
 public interface FileCopier {
 
     /**
-     * Interface for copying files from source to destination.
+     * copies files from source to destination.
      * Implementation of this interface defines how the data is copied
      * (e.g. - FileStream, BufferedStream)
      * @param sourceFile    the path to the source file

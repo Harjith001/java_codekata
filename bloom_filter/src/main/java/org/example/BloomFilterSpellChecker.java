@@ -1,7 +1,8 @@
 package org.example;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.util.BitSet;
 
@@ -21,8 +22,8 @@ public class BloomFilterSpellChecker implements SpellChecker {
     }
 
     @Override
-    public void loadDictionary(String dictionaryFilePath) throws Exception {
-        try (BufferedReader reader = new BufferedReader(new FileReader(dictionaryFilePath))) {
+    public void loadDictionary(InputStream dictionaryFilePath) throws Exception {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(dictionaryFilePath))) {
             String word;
             while ((word = reader.readLine()) != null) {
                 addWord(word.trim().toLowerCase());
@@ -56,6 +57,7 @@ public class BloomFilterSpellChecker implements SpellChecker {
             int hash = 0;
             for (int j = 0; j < 4; j++) {
                 hash <<= 8;
+                //System.out.println(digest[(i * 4 + j) % digest.length]);
                 hash |= (digest[(i * 4 + j) % digest.length] & 0xFF);
             }
             hashes[i] = hash;

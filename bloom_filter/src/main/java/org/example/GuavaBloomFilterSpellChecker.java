@@ -3,8 +3,7 @@ package org.example;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import org.openjdk.jol.info.GraphLayout;
 
@@ -20,8 +19,8 @@ public class GuavaBloomFilterSpellChecker implements SpellChecker{
     }
 
     @Override
-    public void loadDictionary(String dictionaryFilePath) throws Exception {
-        try (BufferedReader reader = new BufferedReader(new FileReader(dictionaryFilePath))) {
+    public void loadDictionary(InputStream dictionaryFilePath) throws Exception {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(dictionaryFilePath))) {
             String word;
             while ((word = reader.readLine()) != null) {
                 word = word.trim().toLowerCase();
@@ -46,7 +45,7 @@ public class GuavaBloomFilterSpellChecker implements SpellChecker{
         double falsePositiveProb = 0.01;
 
         GuavaBloomFilterSpellChecker checker = new GuavaBloomFilterSpellChecker(expectedWords, falsePositiveProb);
-        checker.loadDictionary("/usr/share/dict/american-english");
+        checker.loadDictionary(new FileInputStream("/usr/share/dict/american-english"));
 
         System.out.println("Words loaded: " + checker.getWordCount());
 
