@@ -2,6 +2,7 @@ package org.example;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openjdk.jol.info.GraphLayout;
 
 import java.util.Random;
 
@@ -53,6 +54,8 @@ public class SpellCheckerTest {
 
         assertTrue(falsePositiveRate <= 1.0,
                 "False positive rate exceeded acceptable threshold: " + falsePositiveRate + "%");
+
+        System.out.println(GraphLayout.parseInstance(checker).toFootprint());
     }
 
     private String generateRandomWord(int length) {
