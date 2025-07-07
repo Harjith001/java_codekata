@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MultiPoolServer {
-    private static final int THREAD_COUNT = 10; // Example thread pool size
+    private static final int THREAD_COUNT = 10;
 
     public static void main(String[] args) throws IOException {
         ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
@@ -18,8 +18,9 @@ public class MultiPoolServer {
 
         while (true) {
             Socket connectionSocket = serverSocket.accept();
+            // submit methode can use callable as well as runnable objects
             threadPool.submit(() -> {
-                try (Socket socket = connectionSocket; // auto-close on completion
+                try (Socket socket = connectionSocket;
                      DataInputStream dataIn = new DataInputStream(socket.getInputStream());
                      DataOutputStream dataOut = new DataOutputStream(socket.getOutputStream())) {
 

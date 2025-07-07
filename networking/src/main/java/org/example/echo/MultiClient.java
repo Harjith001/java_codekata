@@ -25,7 +25,7 @@ public class MultiClient {
                     System.out.println("Server message : " + response);
                     Thread.sleep(5000);
                 } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+                    //log
                 }
             }).start();
     }

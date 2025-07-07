@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -56,10 +57,10 @@ public class NioEchoServer implements EchoServer {
         short length = buffer.getShort();
         byte[] data = new byte[length];
         buffer.get(data);
-        String message = new String(data, "UTF-8");
+        String message = new String(data, StandardCharsets.UTF_8);
 
         String response = "Server's " + message;
-        byte[] responseBytes = response.getBytes("UTF-8");
+        byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
         ByteBuffer responseBuffer = ByteBuffer.allocate(2 + responseBytes.length);
         responseBuffer.putShort((short) responseBytes.length);
         responseBuffer.put(responseBytes);
