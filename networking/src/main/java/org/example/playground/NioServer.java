@@ -9,8 +9,7 @@ import java.util.Iterator;
 public class NioServer {
     public static void main(String[] args) throws IOException {
         Selector selector = Selector.open();
-        ServerSocketChannel serverSocket = ServerSocketChannel.open();
-        serverSocket.bind(new InetSocketAddress(5001));
+        ServerSocketChannel serverSocket = ServerSocketChannel.open().bind(new InetSocketAddress(5001));
         serverSocket.configureBlocking(false);
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 
