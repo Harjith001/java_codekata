@@ -1,116 +1,78 @@
 package org.example.echo;
 
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NioEchoServer implements EchoServer {
 
+    private ServerSocketChannel serverChannel;
     private Selector selector;
-    private ServerSocketChannel serverSocket;
-    private volatile boolean running;
-    private Thread serverThread;
+    private final AtomicBoolean running = new AtomicBoolean(false);
 
     @Override
     public void start(int port) throws IOException {
         selector = Selector.open();
-        serverSocket = ServerSocketChannel.open();
-        serverSocket.bind(new InetSocketAddress(port));
-        serverSocket.configureBlocking(false);
-        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+        serverChannel = ServerSocketChannel.open();
+        serverChannel.configureBlocking(false);
+        serverChannel.bind(new InetSocketAddress(port));
+        serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-        running = true;
+        running.set(true);
 
-        serverThread = new Thread(() -> {
-            ByteBuffer buffer = ByteBuffer.allocate(256);
+        while (running.get()) {
+            selector.select(1000);
+            Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
 
-            try {
-                while (running) {
-                    if (selector.select(100) == 0) {
-                        continue;
-                    }
+            while (keys.hasNext()) {
+                SelectionKey key = keys.next();
+                keys.remove();
 
-                    Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
-
-                    while (keys.hasNext()) {
-                        SelectionKey key = keys.next();
-                        keys.remove();
-
-                        if (!key.isValid()) {
-                            continue;
-                        }
-
-                        if (key.isAcceptable()) {
-                            ServerSocketChannel server = (ServerSocketChannel) key.channel();
-                            SocketChannel client = server.accept();
-                            if (client != null) {
-                                client.configureBlocking(false);
-                                client.register(selector, SelectionKey.OP_READ);
-                            }
-                        }
-
-                        if (key.isReadable()) {
-                            SocketChannel client = (SocketChannel) key.channel();
-                            buffer.clear();
-                            int read = client.read(buffer);
-
-                            if (read == -1) {
-                                client.close();
-                                continue;
-                            }
-
-                            String msg = new String(buffer.array(), 0, read);
-                            System.out.println("Received: " + msg);
-
-                            String response = "Server's " + msg;
-                            ByteBuffer outBuffer = ByteBuffer.wrap(response.getBytes());
-                            while (outBuffer.hasRemaining()) {
-                                client.write(outBuffer);
-                            }
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                if (running) {
-                    e.printStackTrace();
-                }
-            } finally {
-                try {
-                    stop();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (key.isAcceptable()) {
+                    SocketChannel client = serverChannel.accept();
+                    client.configureBlocking(false);
+                    client.register(selector, SelectionKey.OP_READ);
+                } else if (key.isReadable()) {
+                    handleClient((SocketChannel) key.channel());
                 }
             }
-        });
+        }
+    }
 
-        serverThread.start();
-        System.out.println("Server started on port " + port);
+    private void handleClient(SocketChannel client) throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        int bytesRead = client.read(buffer);
+
+        if (bytesRead <= 0) {
+            client.close();
+            return;
+        }
+
+        buffer.flip();
+
+        short length = buffer.getShort();
+        byte[] data = new byte[length];
+        buffer.get(data);
+        String message = new String(data, "UTF-8");
+
+        String response = "Server's " + message;
+        byte[] responseBytes = response.getBytes("UTF-8");
+        ByteBuffer responseBuffer = ByteBuffer.allocate(2 + responseBytes.length);
+        responseBuffer.putShort((short) responseBytes.length);
+        responseBuffer.put(responseBytes);
+        responseBuffer.flip();
+
+        client.write(responseBuffer);
     }
 
     @Override
     public void stop() throws IOException {
-        running = false;
-        if (selector != null) {
-            selector.wakeup();
-        }
-
-        if (serverThread != null) {
-            try {
-                serverThread.join();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        if (serverSocket != null) {
-            serverSocket.close();
-        }
-        if (selector != null) {
-            selector.close();
-        }
-        System.out.println("Server stopped");
+        running.set(false);
+        if (selector != null) selector.wakeup();
+        if (serverChannel != null) serverChannel.close();
+        if (selector != null) selector.close();
     }
 }
