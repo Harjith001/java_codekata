@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MultiClientTest {
 
     private static final int PORT = 5001;
-    private static NioEchoServer server;
+    private static SingleClientEchoServer server;
     private static Thread serverThread;
 
     @BeforeAll
     static void startServer() throws InterruptedException {
-        server = new NioEchoServer();
+        server = new SingleClientEchoServer();
         serverThread = new Thread(() -> {
             try {
                 server.start(PORT);
