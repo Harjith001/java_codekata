@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MultiClientTest {
 
     private static final int PORT = 5001;
-    private static SingleClientEchoServer server;
+    private static NioEchoServer server;
     private static Thread serverThread;
 
     @BeforeAll
     static void startServer() throws InterruptedException {
-        server = new SingleClientEchoServer();
+        server = new NioEchoServer();
         serverThread = new Thread(() -> {
             try {
                 server.start(PORT);
@@ -51,7 +51,7 @@ public class MultiClientTest {
 
     @Test
     public void testMultipleClients() throws InterruptedException, ExecutionException {
-        int clientCount = 100;
+        int clientCount = 1000;
         ExecutorService executor = Executors.newFixedThreadPool(20);
         List<Future<String>> futures = new ArrayList<>();
 
@@ -65,7 +65,6 @@ public class MultiClientTest {
             String actual = futures.get(i).get();
             assertEquals(expected, actual, "Response mismatch for client " + i);
         }
-
         executor.shutdown();
     }
 }
