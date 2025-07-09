@@ -16,7 +16,7 @@ public class MultiClientEchoServerTest {
 
     @BeforeAll
     public static void setUp() throws Exception {
-        server = new MultiClientEchoServer();
+        server = new NioEchoServer();
         Executors.newSingleThreadExecutor().submit(() -> {
             try {
                 server.start(TEST_PORT);

@@ -1,12 +1,12 @@
 package org.example.echo;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class SingleClientEchoServer implements EchoServer {
+
     private ServerSocket serverSocket;
     private volatile boolean running = true;
 
@@ -15,17 +15,33 @@ public class SingleClientEchoServer implements EchoServer {
         serverSocket = new ServerSocket(port);
         System.out.println("Server listening at port "+ port);
 
+
+        Socket connectionSocket = serverSocket.accept();
+
         while(running) {
-            Socket connectionSocket = serverSocket.accept();
-            try (DataInputStream dataIn = new DataInputStream(connectionSocket.getInputStream());
-                 DataOutputStream dataOut = new DataOutputStream(connectionSocket.getOutputStream())) {
 
-                String messageReceived = dataIn.readUTF();
-                System.out.println("Client's message: " + messageReceived);
-                dataOut.writeUTF("Server's " + messageReceived);
+            try (
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(connectionSocket.getInputStream(), StandardCharsets.UTF_8));
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(connectionSocket.getOutputStream(), StandardCharsets.UTF_8))
+            ) {
 
+                String messageReceived;
+                while ((messageReceived = reader.readLine()) != null) {
+                    System.out.println("Client's message: " + messageReceived);
+
+                    if ("exit".equalsIgnoreCase(messageReceived.trim())) {
+                        writer.write("Goodbye!\n");
+                        writer.flush();
+                        break;
+                    }
+                    writer.write("Server's " + messageReceived + "\n");
+                    writer.flush();
+                }
+                System.out.println("Client disconnected");
             } catch (IOException e) {
-                // log
+                //log
             }
         }
     }
@@ -36,5 +52,11 @@ public class SingleClientEchoServer implements EchoServer {
         if (serverSocket != null && !serverSocket.isClosed()) {
             serverSocket.close();
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        int port = 5001;
+        SingleClientEchoServer server = new SingleClientEchoServer();
+        server.start(port);
     }
 }
