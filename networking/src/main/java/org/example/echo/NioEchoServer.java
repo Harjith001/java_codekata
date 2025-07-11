@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NioEchoServer implements EchoServer {
-
+    private static final int PORT = 5001;
     private ServerSocketChannel serverChannel;
     private Selector selector;
     private final AtomicBoolean running = new AtomicBoolean(false);
@@ -25,18 +25,19 @@ public class NioEchoServer implements EchoServer {
         running.set(true);
 
         while (running.get()) {
-            selector.select(1000);
+            selector.select();
             Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
 
             while (keys.hasNext()) {
                 SelectionKey key = keys.next();
                 keys.remove();
 
+                // For Server Channel - if it can accept a client
                 if (key.isAcceptable()) {
                     SocketChannel client = serverChannel.accept();
                     client.configureBlocking(false);
                     client.register(selector, SelectionKey.OP_READ);
-                } else if (key.isReadable()) {
+                } else if (key.isReadable()) { // For client channel - if it has sent any message
                     handleClient((SocketChannel) key.channel());
                 }
             }
@@ -44,7 +45,7 @@ public class NioEchoServer implements EchoServer {
     }
 
     private void handleClient(SocketChannel client) throws IOException {
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocate(4096);
         int bytesRead = client.read(buffer);
 
         if (bytesRead <= 0) {
@@ -53,19 +54,12 @@ public class NioEchoServer implements EchoServer {
         }
 
         buffer.flip();
-
-        short length = buffer.getShort();
-        byte[] data = new byte[length];
+        byte[] data = new byte[buffer.limit()];
         buffer.get(data);
-        String message = new String(data, StandardCharsets.UTF_8);
+        String message = new String(data, StandardCharsets.UTF_8).trim();
 
-        String response = "Server's " + message;
-        byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
-        ByteBuffer responseBuffer = ByteBuffer.allocate(2 + responseBytes.length);
-        responseBuffer.putShort((short) responseBytes.length);
-        responseBuffer.put(responseBytes);
-        responseBuffer.flip();
-
+        String response = "Server's " + message + "\n";
+        ByteBuffer responseBuffer = ByteBuffer.wrap(response.getBytes(StandardCharsets.UTF_8));
         client.write(responseBuffer);
     }
 
@@ -75,5 +69,16 @@ public class NioEchoServer implements EchoServer {
         if (selector != null) selector.wakeup();
         if (serverChannel != null) serverChannel.close();
         if (selector != null) selector.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        NioEchoServer server = new NioEchoServer();
+        new Thread(()->{
+            try {
+                server.start(PORT);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
     }
 }

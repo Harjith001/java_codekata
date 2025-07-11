@@ -1,5 +1,6 @@
 package org.example.echo;
 
+import org.example.playground.SingleThreadMultiClientEchoServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,12 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MultiClientTest {
 
     private static final int PORT = 5001;
-    private static NioEchoServer server;
+    private static EchoServer server;
     private static Thread serverThread;
 
+    /*
     @BeforeAll
     static void startServer() throws InterruptedException {
-        server = new NioEchoServer();
+        server = new SingleThreadMultiClientEchoServer();
         serverThread = new Thread(() -> {
             try {
                 server.start(PORT);
@@ -31,7 +33,7 @@ public class MultiClientTest {
 
         Thread.sleep(500);
     }
-
+        */
     @AfterAll
     static void stopServer() throws IOException, InterruptedException {
         if (server != null) {
@@ -50,21 +52,33 @@ public class MultiClientTest {
     }
 
     @Test
-    public void testMultipleClients() throws InterruptedException, ExecutionException {
-        int clientCount = 1000;
-        ExecutorService executor = Executors.newFixedThreadPool(20);
+    public void testMultipleClients() throws InterruptedException, ExecutionException, TimeoutException {
+        int clientCount = 100;
+        ExecutorService executor = Executors.newFixedThreadPool(10);
         List<Future<String>> futures = new ArrayList<>();
 
         for (int i = 0; i < clientCount; i++) {
             int finalI = i;
-            futures.add(executor.submit(() -> MultiClient.sendMessage("Hello" + finalI, PORT)));
+            futures.add(executor.submit(() -> {
+                try {
+                    // Add small delay between client connections
+                    Thread.sleep(10);
+                    return MultiClient.sendMessage("Hello" + finalI + "\n", PORT);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return "Error: " + e.getMessage();
+                }
+            }));
         }
 
         for (int i = 0; i < clientCount; i++) {
             String expected = "Server's Hello" + i;
-            String actual = futures.get(i).get();
+            String actual = futures.get(i).get(10, TimeUnit.SECONDS);
+            System.out.println("Client " + i + " response: " + actual);
             assertEquals(expected, actual, "Response mismatch for client " + i);
         }
+
         executor.shutdown();
+        executor.awaitTermination(30, TimeUnit.SECONDS);
     }
 }

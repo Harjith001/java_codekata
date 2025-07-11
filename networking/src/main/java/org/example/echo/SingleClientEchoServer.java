@@ -21,27 +21,38 @@ public class SingleClientEchoServer implements EchoServer {
         while(running) {
 
             try (
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(connectionSocket.getInputStream(), StandardCharsets.UTF_8));
-                    BufferedWriter writer = new BufferedWriter(
-                            new OutputStreamWriter(connectionSocket.getOutputStream(), StandardCharsets.UTF_8))
+                    InputStream inputStream = connectionSocket.getInputStream();
+                    OutputStream outputStream = connectionSocket.getOutputStream()
             ) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                StringBuilder messageBuilder = new StringBuilder();
 
-                String messageReceived;
-                while ((messageReceived = reader.readLine()) != null) {
-                    System.out.println("Client's message: " + messageReceived);
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    String part = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
+                    messageBuilder.append(part);
 
-                    if ("exit".equalsIgnoreCase(messageReceived.trim())) {
-                        writer.write("Goodbye!\n");
-                        writer.flush();
-                        break;
+                    int newlineIndex;
+                    while ((newlineIndex = messageBuilder.indexOf("\n")) != -1) {
+                        String message = messageBuilder.substring(0, newlineIndex).trim();
+                        messageBuilder.delete(0, newlineIndex + 1);
+
+                        System.out.println("Client's message: " + message);
+
+                        if ("exit".equalsIgnoreCase(message)) {
+                            outputStream.write("Goodbye!\n".getBytes(StandardCharsets.UTF_8));
+                            outputStream.flush();
+                            return;
+                        }
+
+                        String response = "Server's " + message + "\n";
+                        outputStream.write(response.getBytes(StandardCharsets.UTF_8));
+                        outputStream.flush();
                     }
-                    writer.write("Server's " + messageReceived + "\n");
-                    writer.flush();
                 }
                 System.out.println("Client disconnected");
             } catch (IOException e) {
-                //log
+                e.printStackTrace();
             }
         }
     }
