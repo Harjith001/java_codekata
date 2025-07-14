@@ -75,71 +75,64 @@ public class TwoThreadMultiClientEchoServer implements EchoServer {
 
         clientHandlerThread = new Thread(() -> {
             while (running) {
-                try {
-                    // Add any new clients from the queue
-                    ClientConnection newClient;
-                    while ((newClient = newClientQueue.poll()) != null) {
-                        clients.add(newClient);
-                        System.out.println("New client added to handler. Total clients: " + clients.size());
-                    }
+                // Add any new clients from the queue
+                ClientConnection newClient;
+                while ((newClient = newClientQueue.poll()) != null) {
+                    clients.add(newClient);
+                    System.out.println("New client added to handler. Total clients: " + clients.size());
+                }
 
-                    // Handle existing clients
-                    Iterator<ClientConnection> iterator = clients.iterator();
-                    while (iterator.hasNext()) {
-                        ClientConnection client = iterator.next();
+                // Handle existing clients
+                Iterator<ClientConnection> iterator = clients.iterator();
+                while (iterator.hasNext()) {
+                    ClientConnection client = iterator.next();
 
-                        try {
-                            client.socket.setSoTimeout(5);
-                            int available = client.inputStream.available();
+                    try {
+                        client.socket.setSoTimeout(5);
+                        int available = client.inputStream.available();
 
-                            if (available > 0) {
-                                byte[] buffer = new byte[Math.min(available, 4096)];
-                                int bytesRead = client.inputStream.read(buffer);
+                        if (available > 0) {
+                            byte[] buffer = new byte[Math.min(available, 4096)];
+                            int bytesRead = client.inputStream.read(buffer);
 
-                                if (bytesRead == -1) {
-                                    System.out.println("Client disconnected");
+                            if (bytesRead == -1) {
+                                System.out.println("Client disconnected");
+                                client.close();
+                                iterator.remove();
+                                continue;
+                            }
+
+                            String part = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
+                            client.messageBuilder.append(part);
+
+                            int newlineIndex;
+                            while ((newlineIndex = client.messageBuilder.indexOf("\n")) != -1) {
+                                String message = client.messageBuilder.substring(0, newlineIndex).trim();
+                                client.messageBuilder.delete(0, newlineIndex + 1);
+
+                                System.out.println("Client's message: " + message);
+
+                                if ("exit".equalsIgnoreCase(message)) {
+                                    client.outputStream.write("Goodbye!\n".getBytes(StandardCharsets.UTF_8));
+                                    client.outputStream.flush();
                                     client.close();
                                     iterator.remove();
-                                    continue;
+                                    System.out.println("Client disconnected via exit command");
+                                    break;
                                 }
 
-                                String part = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
-                                client.messageBuilder.append(part);
-
-                                int newlineIndex;
-                                while ((newlineIndex = client.messageBuilder.indexOf("\n")) != -1) {
-                                    String message = client.messageBuilder.substring(0, newlineIndex).trim();
-                                    client.messageBuilder.delete(0, newlineIndex + 1);
-
-                                    System.out.println("Client's message: " + message);
-
-                                    if ("exit".equalsIgnoreCase(message)) {
-                                        client.outputStream.write("Goodbye!\n".getBytes(StandardCharsets.UTF_8));
-                                        client.outputStream.flush();
-                                        client.close();
-                                        iterator.remove();
-                                        System.out.println("Client disconnected via exit command");
-                                        break;
-                                    }
-
-                                    String response = "Server's " + message + "\n";
-                                    client.outputStream.write(response.getBytes(StandardCharsets.UTF_8));
-                                    client.outputStream.flush();
-                                }
+                                String response = "Server's " + message + "\n";
+                                client.outputStream.write(response.getBytes(StandardCharsets.UTF_8));
+                                client.outputStream.flush();
                             }
-                        } catch (IOException e) {
-                            LOG.error("Client connection error: {}", e.getMessage());
-                            client.close();
-                            iterator.remove();
                         }
+                    } catch (IOException e) {
+                        LOG.error("Client connection error: {}", e.getMessage());
+                        client.close();
+                        iterator.remove();
                     }
-
-                    // Small sleep to prevent busy waiting
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
                 }
+
             }
         }, "ClientHandler");
 
