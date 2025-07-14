@@ -26,32 +26,13 @@ public class SingleClientEchoServer implements EchoServer {
             ) {
                 byte[] buffer = new byte[1024];
                 int bytesRead;
-                StringBuilder messageBuilder = new StringBuilder();
 
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    String part = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
-                    messageBuilder.append(part);
-
-                    int newlineIndex;
-                    while ((newlineIndex = messageBuilder.indexOf("\n")) != -1) {
-                        String message = messageBuilder.substring(0, newlineIndex).trim();
-                        messageBuilder.delete(0, newlineIndex + 1);
-
-                        System.out.println("Client's message: " + message);
-
-                        if ("exit".equalsIgnoreCase(message)) {
-                            outputStream.write("Goodbye!\n".getBytes(StandardCharsets.UTF_8));
-                            outputStream.flush();
-                            return;
-                        }
-
-                        String response = "Server's " + message + "\n";
-                        outputStream.write(response.getBytes(StandardCharsets.UTF_8));
-                        outputStream.flush();
-                    }
+                    outputStream.write(buffer);
+                    outputStream.flush();
                 }
-                System.out.println("Client disconnected");
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }

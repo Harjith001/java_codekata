@@ -7,7 +7,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,40 +14,20 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class TwoThreadMultiClientEchoServer implements EchoServer {
-
+    private static final short PORT = 5001;
     private static final Logger LOG = LogManager.getLogger(TwoThreadMultiClientEchoServer.class);
 
     private ServerSocket serverSocket;
     private volatile boolean running = true;
+
+    //two queues
+
     private final List<ClientConnection> clients = new ArrayList<>();
     private final BlockingQueue<ClientConnection> newClientQueue = new LinkedBlockingQueue<>();
+    
 
     private Thread acceptorThread;
     private Thread clientHandlerThread;
-
-    private static class ClientConnection {
-        Socket socket;
-        InputStream inputStream;
-        OutputStream outputStream;
-        StringBuilder messageBuilder;
-
-        ClientConnection(Socket socket) throws IOException {
-            this.socket = socket;
-            this.inputStream = socket.getInputStream();
-            this.outputStream = socket.getOutputStream();
-            this.messageBuilder = new StringBuilder();
-        }
-
-        void close() {
-            try {
-                if (inputStream != null) inputStream.close();
-                if (outputStream != null) outputStream.close();
-                if (socket != null && !socket.isClosed()) socket.close();
-            } catch (IOException e) {
-                System.out.println("Error closing client: " + e.getMessage());
-            }
-        }
-    }
 
     @Override
     public void start(int port) throws IOException {
@@ -94,37 +73,7 @@ public class TwoThreadMultiClientEchoServer implements EchoServer {
                         if (available > 0) {
                             byte[] buffer = new byte[Math.min(available, 4096)];
                             int bytesRead = client.inputStream.read(buffer);
-
-                            if (bytesRead == -1) {
-                                System.out.println("Client disconnected");
-                                client.close();
-                                iterator.remove();
-                                continue;
-                            }
-
-                            String part = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
-                            client.messageBuilder.append(part);
-
-                            int newlineIndex;
-                            while ((newlineIndex = client.messageBuilder.indexOf("\n")) != -1) {
-                                String message = client.messageBuilder.substring(0, newlineIndex).trim();
-                                client.messageBuilder.delete(0, newlineIndex + 1);
-
-                                System.out.println("Client's message: " + message);
-
-                                if ("exit".equalsIgnoreCase(message)) {
-                                    client.outputStream.write("Goodbye!\n".getBytes(StandardCharsets.UTF_8));
-                                    client.outputStream.flush();
-                                    client.close();
-                                    iterator.remove();
-                                    System.out.println("Client disconnected via exit command");
-                                    break;
-                                }
-
-                                String response = "Server's " + message + "\n";
-                                client.outputStream.write(response.getBytes(StandardCharsets.UTF_8));
-                                client.outputStream.flush();
-                            }
+                            client.outputStream.write(buffer);
                         }
                     } catch (IOException e) {
                         LOG.error("Client connection error: {}", e.getMessage());
@@ -188,12 +137,11 @@ public class TwoThreadMultiClientEchoServer implements EchoServer {
     }
 
     public static void main(String[] args) {
-        int port = 5001;
         TwoThreadMultiClientEchoServer server = new TwoThreadMultiClientEchoServer();
 
         Thread serverThread = new Thread(() -> {
             try {
-                server.start(port);
+                server.start(PORT);
             } catch (IOException e) {
                 System.out.println("Server error: " + e.getMessage());
             }
