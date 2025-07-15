@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -27,11 +28,12 @@ public class ClientHandler implements Runnable{
                 ClientConnection client = iterator.next();
 
                 try {
-                    client.socket.setSoTimeout(5000);
                     int available = client.inputStream.available();
 
                     if (available > 0) {
+
                         byte[] buffer = new byte[Math.min(available, 4096)];
+                        client.inputStream.read(buffer);
                         client.outputStream.write(buffer);
                     }
                 } catch (IOException e) {
