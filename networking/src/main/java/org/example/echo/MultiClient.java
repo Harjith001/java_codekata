@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public class MultiClient {
 
-    private static final int COUNT = 100000;
+    private static final int COUNT = 100;
 
     public static void sendMessage(String message, int port) throws IOException {
         try (Socket socket = new Socket("127.0.0.1", port);
