@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public class MultiClient {
 
-    private static final int COUNT = 100;
+    private static final int COUNT = 100000000;
 
     public static void sendMessage(String message, int port) throws IOException {
         try (Socket socket = new Socket("127.0.0.1", port);
@@ -44,7 +44,7 @@ public class MultiClient {
     }
 
     private void threadPoolImplementation() {
-        ExecutorService threadPool = Executors.newFixedThreadPool(100);
+        ExecutorService threadPool = Executors.newFixedThreadPool(10000);
 
         for (int i = 0; i < COUNT; i++) {
             final int clientId = i;

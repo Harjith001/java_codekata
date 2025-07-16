@@ -9,13 +9,11 @@ public class ClientConnection {
     Socket socket;
     InputStream inputStream;
     OutputStream outputStream;
-    StringBuilder messageBuilder;
 
     ClientConnection(Socket socket) throws IOException {
         this.socket = socket;
         this.inputStream = socket.getInputStream();
         this.outputStream = socket.getOutputStream();
-        this.messageBuilder = new StringBuilder();
     }
 
     void close() {

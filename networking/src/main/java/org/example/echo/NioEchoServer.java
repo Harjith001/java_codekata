@@ -58,7 +58,11 @@ public class NioEchoServer implements EchoServer {
     public void stop() throws IOException {
         running = false;
         if (serverChannel != null) serverChannel.close();
-        if (selector != null) selector.close();
+        if (selector != null){
+            selector.wakeup();
+            selector.close();
+        }
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -70,6 +74,6 @@ public class NioEchoServer implements EchoServer {
                 throw new RuntimeException(e);
             }
         }).start();
-        
+
     }
 }

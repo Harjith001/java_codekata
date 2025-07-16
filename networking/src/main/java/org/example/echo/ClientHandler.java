@@ -21,7 +21,6 @@ public class ClientHandler implements Runnable{
     @Override
     public void run(){
         while (true) {
-            ClientConnection newClient;
 
             Iterator<ClientConnection> iterator = clients.iterator();
             while (iterator.hasNext()) {
@@ -31,7 +30,6 @@ public class ClientHandler implements Runnable{
                     int available = client.inputStream.available();
 
                     if (available > 0) {
-
                         byte[] buffer = new byte[Math.min(available, 4096)];
                         client.inputStream.read(buffer);
                         client.outputStream.write(buffer);

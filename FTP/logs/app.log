@@ -1,0 +1,30 @@
+2025-07-16 15:45:08 [main] ERROR org.example.ftp.SingleClientFTP - Server start error : Permission denied
+2025-07-16 15:45:13 [main] ERROR org.example.ftp.SingleClientFTP - Server start error : Permission denied
+2025-07-16 15:45:36 [main] ERROR org.example.ftp.SingleClientFTP - Server start error : Permission denied
+2025-07-16 15:45:46 [main] ERROR org.example.ftp.SingleClientFTP - Server start error : Permission denied
+2025-07-16 15:46:32 [main] INFO  org.example.ftp.SingleClientFTP - Server is listening at PORT 80
+2025-07-16 15:47:10 [main] INFO  org.example.ftp.SingleClientFTP - Server is listening at PORT 80
+2025-07-16 15:47:12 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:47:12 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : LIST
+2025-07-16 15:49:17 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:49:17 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : LIST
+2025-07-16 15:52:25 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:52:25 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET test.txt
+2025-07-16 15:52:49 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:53:03 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET Sample.txt 
+2025-07-16 15:53:16 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:53:22 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET Sample1.txt
+2025-07-16 15:53:23 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : 
+2025-07-16 15:53:50 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:53:56 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:54:10 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET Sample1.txt > downloaded.txt
+2025-07-16 15:54:11 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : 
+2025-07-16 15:55:06 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:55:06 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET Sample1.txt
+2025-07-16 15:56:09 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 15:56:09 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : PUT uploaded.txt
+2025-07-16 15:56:09 [main] INFO  org.example.ftp.SingleClientFTP - File is being sent to client : uploaded.txt
+2025-07-16 16:03:51 [main] INFO  org.example.ftp.SingleClientFTP - Server is listening at PORT 80
+2025-07-16 16:04:53 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
+2025-07-16 16:04:53 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : PUT testImage.png
+2025-07-16 16:04:53 [main] INFO  org.example.ftp.SingleClientFTP - File is being sent to client : testImage.png
