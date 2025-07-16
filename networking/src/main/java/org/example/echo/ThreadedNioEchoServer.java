@@ -16,6 +16,7 @@ public class ThreadedNioEchoServer implements EchoServer {
     private Selector selector;
     private final AtomicBoolean running = new AtomicBoolean(false);
     private ExecutorService workerPool;
+    private final static short MAX_CLIENTS_PER_WORKER = 10;
 
     @Override
     public void start(int port) throws IOException {
@@ -42,11 +43,10 @@ public class ThreadedNioEchoServer implements EchoServer {
                 keyIterator.remove();
 
                 try {
-                    if (key.isValid() && key.isAcceptable()) {
+                    if (key.isAcceptable()) {
                         acceptClient(key);
-                    } else if (key.isValid() && key.isReadable()) {
-                        // Dispatch client processing to worker thread
-                        key.interestOps(key.interestOps() & ~SelectionKey.OP_READ); // Prevent repeated reads
+                    } else if (key.isReadable()) {
+                        //key.interestOps(key.interestOps() & ~SelectionKey.OP_READ);
                         workerPool.submit(() -> {
                             try {
                                 handleClient(key);
@@ -93,9 +93,7 @@ public class ThreadedNioEchoServer implements EchoServer {
         ByteBuffer responseBuffer = ByteBuffer.wrap(response.getBytes(StandardCharsets.UTF_8));
         client.write(responseBuffer);
 
-        // Re-enable OP_READ
-        key.interestOps(key.interestOps() | SelectionKey.OP_READ);
-        key.selector().wakeup(); // wake up selector in case it's blocked
+        key.selector().wakeup();
     }
 
     private void closeClient(SelectionKey key) {

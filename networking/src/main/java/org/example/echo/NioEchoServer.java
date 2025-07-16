@@ -12,7 +12,7 @@ public class NioEchoServer implements EchoServer {
     private static final int PORT = 5001;
     private ServerSocketChannel serverChannel;
     private Selector selector;
-    private final AtomicBoolean running = new AtomicBoolean(false);
+    private boolean running = false;
 
     @Override
     public void start(int port) throws IOException {
@@ -22,22 +22,20 @@ public class NioEchoServer implements EchoServer {
         serverChannel.bind(new InetSocketAddress(port));
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-        running.set(true);
+        running = true;
 
-        while (running.get()) {
+        while (running) {
             selector.select();
             Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
 
             while (keys.hasNext()) {
                 SelectionKey key = keys.next();
                 keys.remove();
-
-                // For Server Channel - if it can accept a client
                 if (key.isAcceptable()) {
                     SocketChannel client = serverChannel.accept();
                     client.configureBlocking(false);
                     client.register(selector, SelectionKey.OP_READ);
-                } else if (key.isReadable()) { // For client channel - if it has sent any message
+                } else if (key.isReadable()) {
                     handleClient((SocketChannel) key.channel());
                 }
             }
@@ -52,21 +50,13 @@ public class NioEchoServer implements EchoServer {
             client.close();
             return;
         }
-
         buffer.flip();
-        byte[] data = new byte[buffer.limit()];
-        buffer.get(data);
-        String message = new String(data, StandardCharsets.UTF_8).trim();
-
-        String response = "Server's " + message + "\n";
-        ByteBuffer responseBuffer = ByteBuffer.wrap(response.getBytes(StandardCharsets.UTF_8));
-        client.write(responseBuffer);
+        client.write(buffer);
     }
 
     @Override
     public void stop() throws IOException {
-        running.set(false);
-        if (selector != null) selector.wakeup();
+        running = false;
         if (serverChannel != null) serverChannel.close();
         if (selector != null) selector.close();
     }
@@ -80,5 +70,6 @@ public class NioEchoServer implements EchoServer {
                 throw new RuntimeException(e);
             }
         }).start();
+        
     }
 }
