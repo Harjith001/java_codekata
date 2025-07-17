@@ -37,8 +37,6 @@ public class TwoThreadMultiClientEchoServer implements EchoServer {
                     ClientConnection clientHandler = new ClientConnection(newClient);
                     newClientQueue.offer(clientHandler);
                     System.out.println("New client connected and added to the queue");
-                } catch (SocketTimeoutException e) {
-                    // Timeout is expected, continue loop
                 } catch (IOException e) {
                     if (running) {
                         LOG.error("Error accepting connection: {}", e.getMessage());

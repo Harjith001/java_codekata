@@ -1,30 +1,91 @@
-2025-07-16 15:45:08 [main] ERROR org.example.ftp.SingleClientFTP - Server start error : Permission denied
-2025-07-16 15:45:13 [main] ERROR org.example.ftp.SingleClientFTP - Server start error : Permission denied
-2025-07-16 15:45:36 [main] ERROR org.example.ftp.SingleClientFTP - Server start error : Permission denied
-2025-07-16 15:45:46 [main] ERROR org.example.ftp.SingleClientFTP - Server start error : Permission denied
-2025-07-16 15:46:32 [main] INFO  org.example.ftp.SingleClientFTP - Server is listening at PORT 80
-2025-07-16 15:47:10 [main] INFO  org.example.ftp.SingleClientFTP - Server is listening at PORT 80
-2025-07-16 15:47:12 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:47:12 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : LIST
-2025-07-16 15:49:17 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:49:17 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : LIST
-2025-07-16 15:52:25 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:52:25 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET test.txt
-2025-07-16 15:52:49 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:53:03 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET Sample.txt 
-2025-07-16 15:53:16 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:53:22 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET Sample1.txt
-2025-07-16 15:53:23 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : 
-2025-07-16 15:53:50 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:53:56 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:54:10 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET Sample1.txt > downloaded.txt
-2025-07-16 15:54:11 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : 
-2025-07-16 15:55:06 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:55:06 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : GET Sample1.txt
-2025-07-16 15:56:09 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 15:56:09 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : PUT uploaded.txt
-2025-07-16 15:56:09 [main] INFO  org.example.ftp.SingleClientFTP - File is being sent to client : uploaded.txt
-2025-07-16 16:03:51 [main] INFO  org.example.ftp.SingleClientFTP - Server is listening at PORT 80
-2025-07-16 16:04:53 [main] INFO  org.example.ftp.SingleClientFTP - Client is connected to the server
-2025-07-16 16:04:53 [main] INFO  org.example.ftp.SingleClientFTP - Command received from client : PUT testImage.png
-2025-07-16 16:04:53 [main] INFO  org.example.ftp.SingleClientFTP - File is being sent to client : testImage.png
+2025-07-17 12:00:07 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 12:00:14 [main] INFO  org.example.ftp.SingleClientAuth - Client connected from /127.0.0.1
+2025-07-17 12:00:18 [main] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:00:32 [main] INFO  org.example.ftp.SingleClientAuth - Client disconnected, ready to accept next connection.
+2025-07-17 12:00:32 [main] INFO  org.example.ftp.SingleClientAuth - Client connected from /127.0.0.1
+2025-07-17 12:00:32 [main] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:00:35 [main] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:00:36 [main] INFO  org.example.ftp.SingleClientAuth - Client disconnected, ready to accept next connection.
+2025-07-17 12:03:43 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 12:03:52 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:05:57 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 12:06:09 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST 
+2025-07-17 12:06:10 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : asd
+2025-07-17 12:11:20 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 12:11:29 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:16:41 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 12:16:51 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 12:16:53 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:17:04 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 12:17:04 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 12:17:04 [Thread-2] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:17:09 [Thread-2] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:17:10 [Thread-2] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 12:26:39 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 12:26:45 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 12:27:03 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 12:27:03 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LOGIN 
+2025-07-17 12:27:10 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 12:28:10 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 12:28:14 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 12:28:22 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 12:28:22 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LOG
+2025-07-17 12:29:23 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 12:29:23 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 12:29:33 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 12:31:20 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 12:31:27 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 12:31:44 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 12:31:44 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LOGIN charlie 123
+2025-07-17 12:31:50 [Thread-1] WARN  org.example.ftp.FTPImplementation - Authentication failed or client disconnected.
+2025-07-17 12:31:50 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:24:08 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 14:24:14 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:24:19 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:24:23 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 14:24:25 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 14:24:31 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : 
+2025-07-17 14:24:34 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:25:04 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 14:25:12 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:25:21 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:25:24 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 14:25:40 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:25:40 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:25:40 [Thread-2] WARN  org.example.ftp.FTPImplementation - Authentication failed or client disconnected.
+2025-07-17 14:25:40 [Thread-2] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:26:04 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:26:04 [Thread-3] WARN  org.example.ftp.FTPImplementation - Authentication failed or client disconnected.
+2025-07-17 14:26:04 [Thread-3] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:26:21 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 14:26:23 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:26:30 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:26:32 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 14:26:46 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:26:46 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:26:46 [Thread-2] WARN  org.example.ftp.FTPImplementation - Authentication failed or client disconnected.
+2025-07-17 14:26:46 [Thread-2] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:29:33 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 14:29:41 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:29:46 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:29:48 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-17 14:30:04 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:30:04 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:30:11 [Thread-2] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:37:12 [main] INFO  org.example.ftp.SingleClientAuth - Server is listening on PORT 5001
+2025-07-17 14:37:17 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:37:22 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:37:36 [Thread-1] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:37:36 [Thread-0] INFO  org.example.ftp.SingleClientAuth - Serving client: /127.0.0.1
+2025-07-17 14:37:39 [Thread-2] WARN  org.example.ftp.FTPImplementation - Authentication failed or client disconnected.
+2025-07-17 14:37:39 [Thread-2] INFO  org.example.ftp.SingleClientAuth - Client disconnected. Ready for next in queue.
+2025-07-17 14:41:21 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
+2025-07-17 14:41:47 [Thread-0] WARN  org.example.ftp.FTPImplementation - Authentication failed for user: dhnaugs
+2025-07-17 14:41:58 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:42:01 [Thread-0] WARN  org.example.ftp.FTPImplementation - Authentication failed or client disconnected.
+2025-07-17 14:54:18 [main] INFO  org.example.ftp.ThreadPoolFTP - Server is listening on PORT 5001
+2025-07-17 14:54:35 [main] INFO  org.example.ftp.ThreadPoolFTP - Server is listening on PORT 5001
+2025-07-17 14:54:49 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:55:17 [pool-2-thread-3] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-17 14:55:41 [pool-2-thread-2] WARN  org.example.ftp.FTPImplementation - Authentication failed or client disconnected.
+2025-07-17 14:55:41 [pool-2-thread-3] WARN  org.example.ftp.FTPImplementation - Authentication failed or client disconnected.
