@@ -6,7 +6,7 @@ import org.apache.logging.log4j.core.Logger;
 import java.io.*;
 import java.net.Socket;
 
-public abstract class FTPImplementation implements  FTPServer{
+public abstract class FTPImplementation implements FTPServer {
     private static final String DIR = "server_directory";
     private static final Logger LOG = (Logger) LogManager.getLogger(FTPImplementation.class);
 
@@ -14,8 +14,8 @@ public abstract class FTPImplementation implements  FTPServer{
     public void handleList(PrintWriter out) {
         File folder = new File(DIR);
         File[] files = folder.listFiles();
-        if(files != null){
-            for(File file : files) {
+        if (files != null) {
+            for (File file : files) {
                 if (file.isFile()) {
                     out.println(file.getName());
                 }
@@ -24,41 +24,45 @@ public abstract class FTPImplementation implements  FTPServer{
     }
 
     @Override
-    public void handleGet(String fileName, PrintWriter out, DataOutputStream dataOut){
+    public void handleGet(String fileName, PrintWriter out, DataOutputStream dataOut) {
         File file = new File(DIR, fileName);
 
-        if(!file.exists()) {
+        if (!file.exists()) {
             out.println("ERROR : File not found");
             return;
         }
-
-        try{
-            FileInputStream fis = new FileInputStream(file);
-            byte[] buffer = new byte[4096];
-            int len;
-            while((len = fis.read(buffer)) != -1) {
-                dataOut.write(buffer, 0, len);
+        synchronized (fileName.intern()) {
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                byte[] buffer = new byte[4096];
+                int len;
+                while ((len = fis.read(buffer)) != -1) {
+                    dataOut.write(buffer, 0, len);
+                }
+                fis.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            fis.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void handlePut(String fileName, BufferedReader in, DataInputStream dataIn) {
         File file = new File(DIR, fileName);
-        try(FileOutputStream fos = new FileOutputStream(file)) {
-            LOG.info("File is being sent to client : {}", fileName);
-            byte[] buffer = new byte[4096];
-            int len;
+        synchronized (fileName.intern()) {
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                LOG.info("File is being sent to client : {}", fileName);
+                byte[] buffer = new byte[4096];
+                int len;
 
-            while((len = dataIn.read(buffer)) != -1) {
-                fos.write(buffer, 0, len);
+                while ((len = dataIn.read(buffer)) != -1) {
+                    fos.write(buffer, 0, len);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+
     }
 
     private boolean handleAuth(BufferedReader in, PrintWriter out) throws IOException {
@@ -92,24 +96,21 @@ public abstract class FTPImplementation implements  FTPServer{
     }
 
     protected void handleClient(Socket client) {
-        try(
+        try (
                 BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter out = new PrintWriter(client.getOutputStream(), true);
                 DataOutputStream dataOut = new DataOutputStream(client.getOutputStream());
                 DataInputStream dataIn = new DataInputStream(client.getInputStream());
         ) {
 
-            if (!handleAuth(in, out)) {
-                LOG.warn("Authentication failed or client disconnected.");
-                return;
-            }
+//            if (!handleAuth(in, out)) {
+//                LOG.warn("Authentication failed or client disconnected.");
+//                return;
+//            }
 
             String command;
 
             while ((command = in.readLine()) != null) {
-
-
-
                 LOG.info("Command received from client : " + command);
                 String[] split = command.split(" ");
 

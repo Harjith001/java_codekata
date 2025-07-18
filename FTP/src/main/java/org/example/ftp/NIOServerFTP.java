@@ -6,8 +6,6 @@ import org.apache.logging.log4j.core.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;

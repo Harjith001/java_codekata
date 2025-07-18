@@ -7,16 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MultiClientFTP extends FTPImplementation{
+
     private static final int PORT = 5001;
     private static final String DIR = "server_directory";
     private static final Logger LOG = (Logger) LogManager.getLogger(MultiClientFTP.class);
-
-    private final Queue<Socket> clients = new ConcurrentLinkedQueue<>();
-    private volatile boolean clientConnected = false;
 
     private void start() throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -25,7 +21,7 @@ public class MultiClientFTP extends FTPImplementation{
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                clientSocket.getOutputStream().write("Connected to server. \n".getBytes());
+                //clientSocket.getOutputStream().write("Connected to server. \n".getBytes());
                 new Thread(()->{
                     handleClient(clientSocket);
                 }).start();
