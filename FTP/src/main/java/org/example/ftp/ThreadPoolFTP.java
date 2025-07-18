@@ -7,12 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ThreadPoolFTP extends FTPImplementation {
+
     private static final int PORT = 5001;
     private static final String DIR = "server_directory";
     private static final Logger LOG = (Logger) LogManager.getLogger(ThreadPoolFTP.class);
