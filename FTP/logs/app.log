@@ -1,9 +1,42 @@
-2025-07-18 11:01:24 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
-2025-07-18 11:02:30 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : GET testImage.png
-2025-07-18 11:05:23 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : GET testImage.png
-2025-07-18 11:05:23 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : 
-2025-07-18 11:06:15 [Thread-2] INFO  org.example.ftp.FTPImplementation - Command received from client : GET Sample1.txt
-2025-07-18 11:06:15 [Thread-2] INFO  org.example.ftp.FTPImplementation - Command received from client : 
-2025-07-18 11:23:13 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
-2025-07-18 11:23:16 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : GET testImage.png
-2025-07-18 11:23:16 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : 
+2025-07-21 10:49:14 [main] INFO  org.example.ftp.ThreadPoolFTP - Server is listening on PORT 5001
+2025-07-21 10:49:41 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-21 10:49:44 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST 
+2025-07-21 10:49:46 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : GET 
+2025-07-21 11:42:08 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
+2025-07-21 11:42:25 [Thread-0] INFO  org.example.ftp.FTPImplementation - Connected to client: 127.0.0.1
+2025-07-21 11:43:00 [Thread-0] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-21 11:43:41 [Thread-1] INFO  org.example.ftp.FTPImplementation - Connected to client: 127.0.0.1
+2025-07-21 11:43:46 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-21 11:43:48 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received: LIST
+2025-07-21 11:44:24 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received: GET Sample1.txt
+2025-07-21 11:44:24 [Thread-1] ERROR org.example.ftp.FTPImplementation - Error during GET transfer of file Sample1.txt
+java.net.BindException: Address already in use
+	at sun.nio.ch.Net.bind0(Native Method) ~[?:?]
+	at sun.nio.ch.Net.bind(Net.java:565) ~[?:?]
+	at sun.nio.ch.Net.bind(Net.java:554) ~[?:?]
+	at sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:636) ~[?:?]
+	at java.net.ServerSocket.bind(ServerSocket.java:391) ~[?:?]
+	at java.net.ServerSocket.<init>(ServerSocket.java:278) ~[?:?]
+	at java.net.ServerSocket.<init>(ServerSocket.java:171) ~[?:?]
+	at org.example.ftp.FTPImplementation.handleFileTransferServer(FTPImplementation.java:100) ~[classes/:?]
+	at org.example.ftp.FTPImplementation.handleClient(FTPImplementation.java:157) ~[classes/:?]
+	at org.example.ftp.MultiClientFTP.lambda$start$0(MultiClientFTP.java:26) ~[classes/:?]
+	at java.lang.Thread.run(Thread.java:1583) [?:?]
+2025-07-21 11:46:10 [Thread-2] INFO  org.example.ftp.FTPImplementation - Connected to client: 127.0.0.1
+2025-07-21 11:46:18 [Thread-2] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-21 11:46:26 [Thread-2] INFO  org.example.ftp.FTPImplementation - Command received: GET Sample1.txt
+2025-07-21 11:46:26 [Thread-2] INFO  org.example.ftp.FTPImplementation - Waiting for data connection on port 5000
+2025-07-21 11:47:13 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
+2025-07-21 11:47:18 [Thread-0] INFO  org.example.ftp.FTPImplementation - Connected to client: 127.0.0.1
+2025-07-21 11:47:22 [Thread-0] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
+2025-07-21 11:47:28 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received: GET Sample1.txt
+2025-07-21 11:47:28 [Thread-0] INFO  org.example.ftp.FTPImplementation - Waiting for data connection on port 42145
+2025-07-21 11:48:06 [Thread-0] INFO  org.example.ftp.FTPImplementation - Data connection established from 127.0.0.1
+2025-07-21 13:26:22 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
+2025-07-21 13:26:27 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-21 13:26:30 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : GET AF
+2025-07-21 13:26:37 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST 
+2025-07-21 13:31:36 [main] INFO  org.example.ftp.ThreadPoolFTP - Server is listening on PORT 5001
+2025-07-21 13:31:40 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : HARJITH
+2025-07-21 13:31:43 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
+2025-07-21 13:32:04 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : list

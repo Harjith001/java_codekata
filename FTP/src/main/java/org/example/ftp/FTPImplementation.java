@@ -100,7 +100,7 @@ public abstract class FTPImplementation implements FTPServer {
                 BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter out = new PrintWriter(client.getOutputStream(), true);
                 DataOutputStream dataOut = new DataOutputStream(client.getOutputStream());
-                DataInputStream dataIn = new DataInputStream(client.getInputStream());
+                DataInputStream dataIn = new DataInputStream(client.getInputStream())
         ) {
 
 //            if (!handleAuth(in, out)) {
