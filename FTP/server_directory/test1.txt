@@ -1,0 +1,2 @@
+Connected to server. 
+Something aint adding up.Error : unknown commands
