@@ -12,9 +12,9 @@ public class NioEchoServer implements EchoServer {
     private ServerSocketChannel serverChannel;
     private Selector selector;
     private boolean running = false;
-
-    // Store pending write data for each client
     private final ConcurrentHashMap<SocketChannel, ByteBuffer> pendingWrites = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<SocketChannel, ByteBuffer> readBuffers = new ConcurrentHashMap<>();
+
 
     @Override
     public void start(int port) throws IOException {
@@ -58,28 +58,35 @@ public class NioEchoServer implements EchoServer {
 
     private void handleRead(SelectionKey key) throws IOException {
         SocketChannel client = (SocketChannel) key.channel();
-        ByteBuffer buffer = ByteBuffer.allocate(4096);
-        int bytesRead = client.read(buffer);
+        ByteBuffer buffer = readBuffers.computeIfAbsent(client, ch -> ByteBuffer.allocate(8192)); // or use dynamic buffer
+
+        ByteBuffer temp = ByteBuffer.allocate(4096);
+        int bytesRead = client.read(temp);
 
         if (bytesRead <= 0) {
             closeConnection(key);
             return;
         }
 
+        temp.flip();
+        if (buffer.remaining() < temp.remaining()) {
+            ByteBuffer expanded = ByteBuffer.allocate(buffer.capacity() + temp.remaining());
+            buffer.flip();
+            expanded.put(buffer);
+            buffer = expanded;
+            readBuffers.put(client, buffer);
+        }
+
+        buffer.put(temp);
         buffer.flip();
-
-        // Try to write immediately
         if (!writeData(client, buffer)) {
-            // If we couldn't write all data, store it and register for write interest
-            ByteBuffer remainingData = ByteBuffer.allocate(buffer.remaining());
-            remainingData.put(buffer);
-            remainingData.flip();
-
-            pendingWrites.put(client, remainingData);
-
-            // Add WRITE interest to the selection key
+            ByteBuffer remaining = ByteBuffer.allocate(buffer.remaining());
+            remaining.put(buffer);
+            remaining.flip();
+            pendingWrites.put(client, remaining);
             key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
         }
+        buffer.clear();
     }
 
     private void handleWrite(SelectionKey key) throws IOException {
@@ -88,15 +95,10 @@ public class NioEchoServer implements EchoServer {
 
         if (pendingData != null) {
             if (writeData(client, pendingData)) {
-                // All data written successfully
                 pendingWrites.remove(client);
-
-                // Remove WRITE interest, keep only READ
                 key.interestOps(SelectionKey.OP_READ);
             }
-            // If writeData returns false, we keep the WRITE interest and try again later
         } else {
-            // No pending data, remove WRITE interest
             key.interestOps(SelectionKey.OP_READ);
         }
     }
@@ -121,10 +123,8 @@ public class NioEchoServer implements EchoServer {
             SocketChannel client = (SocketChannel) key.channel();
             System.out.println("Closing connection: " + client.getRemoteAddress());
 
-            // Clean up pending writes
             pendingWrites.remove(client);
 
-            // Close the channel and cancel the key
             client.close();
             key.cancel();
         } catch (IOException e) {
@@ -147,15 +147,13 @@ public class NioEchoServer implements EchoServer {
 
     public static void main(String[] args) throws IOException {
         NioEchoServer server = new NioEchoServer();
-
-        // Add shutdown hook for graceful cleanup
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        new Thread(() -> {
             try {
                 server.stop();
             } catch (IOException e) {
                 System.err.println("Error during shutdown: " + e.getMessage());
             }
-        }));
+        }).start();
 
         new Thread(() -> {
             try {
