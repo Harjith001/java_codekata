@@ -7,7 +7,6 @@ import org.example.parser.FTPCommandParser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class FTPCommandExecutor extends FTPCommandBaseVisitor<String> {
 
@@ -27,12 +26,10 @@ public class FTPCommandExecutor extends FTPCommandBaseVisitor<String> {
 
     @Override
     public String visitCommand(FTPCommandParser.CommandContext ctx) {
-        // LOGIN is allowed without authentication
         if (ctx.LOGIN() != null) {
             return handleLogin(ctx.username().getText(), ctx.password().getText());
         }
 
-        // All other commands require authentication
         if (!isLoggedIn) {
             return "Error: Not authenticated. Please LOGIN first.";
         }

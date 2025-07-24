@@ -1,0 +1,4 @@
+/usr/lib/jvm/java-21-openjdk-amd64/bin/java -javaagent:/opt/idea-IC-251.25410.129/lib/idea_rt.jar=36977 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /home/harjith/IdeaProjects/FTP_Improved/target/classes:/home/harjith/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar org.example.Main
+FTP Server started on port 2121
+Client connected
+line 1:0 mismatched input 'List' expecting {'LIST', 'GET', 'PUT', 'LOGIN'}
