@@ -1,42 +1,52 @@
-2025-07-21 10:49:14 [main] INFO  org.example.ftp.ThreadPoolFTP - Server is listening on PORT 5001
-2025-07-21 10:49:41 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
-2025-07-21 10:49:44 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST 
-2025-07-21 10:49:46 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : GET 
-2025-07-21 11:42:08 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
-2025-07-21 11:42:25 [Thread-0] INFO  org.example.ftp.FTPImplementation - Connected to client: 127.0.0.1
-2025-07-21 11:43:00 [Thread-0] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
-2025-07-21 11:43:41 [Thread-1] INFO  org.example.ftp.FTPImplementation - Connected to client: 127.0.0.1
-2025-07-21 11:43:46 [Thread-1] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
-2025-07-21 11:43:48 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received: LIST
-2025-07-21 11:44:24 [Thread-1] INFO  org.example.ftp.FTPImplementation - Command received: GET Sample1.txt
-2025-07-21 11:44:24 [Thread-1] ERROR org.example.ftp.FTPImplementation - Error during GET transfer of file Sample1.txt
-java.net.BindException: Address already in use
-	at sun.nio.ch.Net.bind0(Native Method) ~[?:?]
-	at sun.nio.ch.Net.bind(Net.java:565) ~[?:?]
-	at sun.nio.ch.Net.bind(Net.java:554) ~[?:?]
-	at sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:636) ~[?:?]
-	at java.net.ServerSocket.bind(ServerSocket.java:391) ~[?:?]
-	at java.net.ServerSocket.<init>(ServerSocket.java:278) ~[?:?]
-	at java.net.ServerSocket.<init>(ServerSocket.java:171) ~[?:?]
-	at org.example.ftp.FTPImplementation.handleFileTransferServer(FTPImplementation.java:100) ~[classes/:?]
-	at org.example.ftp.FTPImplementation.handleClient(FTPImplementation.java:157) ~[classes/:?]
-	at org.example.ftp.MultiClientFTP.lambda$start$0(MultiClientFTP.java:26) ~[classes/:?]
-	at java.lang.Thread.run(Thread.java:1583) [?:?]
-2025-07-21 11:46:10 [Thread-2] INFO  org.example.ftp.FTPImplementation - Connected to client: 127.0.0.1
-2025-07-21 11:46:18 [Thread-2] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
-2025-07-21 11:46:26 [Thread-2] INFO  org.example.ftp.FTPImplementation - Command received: GET Sample1.txt
-2025-07-21 11:46:26 [Thread-2] INFO  org.example.ftp.FTPImplementation - Waiting for data connection on port 5000
-2025-07-21 11:47:13 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
-2025-07-21 11:47:18 [Thread-0] INFO  org.example.ftp.FTPImplementation - Connected to client: 127.0.0.1
-2025-07-21 11:47:22 [Thread-0] INFO  org.example.ftp.FTPImplementation - Client authenticated successfully.
-2025-07-21 11:47:28 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received: GET Sample1.txt
-2025-07-21 11:47:28 [Thread-0] INFO  org.example.ftp.FTPImplementation - Waiting for data connection on port 42145
-2025-07-21 11:48:06 [Thread-0] INFO  org.example.ftp.FTPImplementation - Data connection established from 127.0.0.1
-2025-07-21 13:26:22 [main] INFO  org.example.ftp.MultiClientFTP - Server is listening on PORT 5001
-2025-07-21 13:26:27 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
-2025-07-21 13:26:30 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : GET AF
-2025-07-21 13:26:37 [Thread-0] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST 
-2025-07-21 13:31:36 [main] INFO  org.example.ftp.ThreadPoolFTP - Server is listening on PORT 5001
-2025-07-21 13:31:40 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : HARJITH
-2025-07-21 13:31:43 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : LIST
-2025-07-21 13:32:04 [pool-2-thread-1] INFO  org.example.ftp.FTPImplementation - Command received from client : list
+2025-07-22 11:05:03 [main] INFO  org.example.ftp.MultiClientFTP - FTP Server started on ports: COMMAND=5001, DATA=5002
+2025-07-22 11:05:03 [main] INFO  org.example.ftp.MultiClientFTP - Waiting for client on command port...
+2025-07-22 11:05:37 [main] INFO  org.example.ftp.MultiClientFTP - Client connected on command port: /127.0.0.1
+2025-07-22 11:05:37 [main] INFO  org.example.ftp.MultiClientFTP - Waiting for client on data port...
+2025-07-22 11:06:42 [main] INFO  org.example.ftp.MultiClientFTP - FTP Server started on ports: COMMAND=5001, DATA=5002
+2025-07-22 11:06:42 [main] INFO  org.example.ftp.MultiClientFTP - Waiting for client on command port...
+2025-07-22 11:06:48 [main] INFO  org.example.ftp.MultiClientFTP - Client connected on command port: /127.0.0.1
+2025-07-22 11:06:48 [main] INFO  org.example.ftp.MultiClientFTP - Waiting for client on data port...
+2025-07-22 11:06:58 [main] INFO  org.example.ftp.MultiClientFTP - Client connected on data port: /127.0.0.1
+2025-07-22 11:06:58 [main] INFO  org.example.ftp.MultiClientFTP - Waiting for client on command port...
+2025-07-22 11:11:02 [main] INFO  org.example.ftp.SingleClientQueue - Server listening on COMMAND_PORT=5001, DATA_PORT=5002
+2025-07-22 11:11:02 [main] INFO  org.example.ftp.SingleClientQueue - Waiting for new client...
+2025-07-22 11:11:13 [main] INFO  org.example.ftp.SingleClientQueue - Command socket connected from /127.0.0.1
+2025-07-22 11:11:22 [main] INFO  org.example.ftp.SingleClientQueue - Data socket connected from /127.0.0.1
+2025-07-22 11:11:22 [main] INFO  org.example.ftp.SingleClientQueue - Waiting for new client...
+2025-07-22 11:11:22 [Thread-0] INFO  org.example.ftp.SingleClientQueue - Starting new client session
+2025-07-22 11:12:05 [Thread-1] INFO  org.example.ftp.SingleClientQueue - Client session ended. Ready for next client.
+2025-07-22 11:12:42 [main] INFO  org.example.ftp.SingleClientQueue - Command socket connected from /127.0.0.1
+2025-07-22 11:13:31 [main] INFO  org.example.ftp.SingleClientQueue - Data socket connected from /127.0.0.1
+2025-07-22 11:13:31 [Thread-0] INFO  org.example.ftp.SingleClientQueue - Starting new client session
+2025-07-22 11:13:31 [main] INFO  org.example.ftp.SingleClientQueue - Waiting for new client...
+2025-07-22 11:14:12 [main] INFO  org.example.ftp.SingleClientQueue - Command socket connected from /127.0.0.1
+2025-07-22 11:14:22 [main] INFO  org.example.ftp.SingleClientQueue - Data socket connected from /127.0.0.1
+2025-07-22 11:14:22 [main] INFO  org.example.ftp.SingleClientQueue - Waiting for new client...
+2025-07-22 11:14:24 [Thread-0] INFO  org.example.ftp.SingleClientQueue - Starting new client session
+2025-07-22 11:14:24 [Thread-2] INFO  org.example.ftp.SingleClientQueue - Client session ended. Ready for next client.
+2025-07-22 11:14:57 [Thread-3] INFO  org.example.ftp.SingleClientQueue - Client session ended. Ready for next client.
+2025-07-22 11:15:02 [main] INFO  org.example.ftp.SingleClientQueue - Command socket connected from /127.0.0.1
+2025-07-22 11:15:04 [main] INFO  org.example.ftp.SingleClientQueue - Data socket connected from /127.0.0.1
+2025-07-22 11:15:04 [main] INFO  org.example.ftp.SingleClientQueue - Waiting for new client...
+2025-07-22 11:15:04 [Thread-0] INFO  org.example.ftp.SingleClientQueue - Starting new client session
+2025-07-22 11:15:08 [Thread-4] INFO  org.example.ftp.SingleClientQueue - Client session ended. Ready for next client.
+2025-07-22 11:15:09 [main] INFO  org.example.ftp.SingleClientQueue - Command socket connected from /127.0.0.1
+2025-07-22 11:15:25 [main] INFO  org.example.ftp.SingleClientQueue - Data socket connected from /127.0.0.1
+2025-07-22 11:15:25 [main] INFO  org.example.ftp.SingleClientQueue - Waiting for new client...
+2025-07-22 11:15:25 [Thread-0] INFO  org.example.ftp.SingleClientQueue - Starting new client session
+2025-07-22 11:19:21 [main] INFO  org.example.ftp.SingleClientQueue - Command socket connected from /127.0.0.1
+2025-07-22 11:19:23 [Thread-5] INFO  org.example.ftp.SingleClientQueue - Client session ended. Ready for next client.
+2025-07-22 11:25:53 [main] INFO  org.example.ftp.SingleClientFTP - Server is listening on COMMAND_PORT=5001 and DATA_PORT=5002
+2025-07-22 11:25:53 [main] INFO  org.example.ftp.SingleClientFTP - Waiting for command connection...
+2025-07-22 11:25:58 [main] INFO  org.example.ftp.SingleClientFTP - Command connection from: /127.0.0.1
+2025-07-22 11:30:36 [main] INFO  org.example.ftp.ThreadPoolFTP - Server listening on COMMAND_PORT=5001 and DATA_PORT=5002
+2025-07-22 11:30:36 [main] INFO  org.example.ftp.ThreadPoolFTP - Waiting for command connection...
+2025-07-22 11:30:44 [main] INFO  org.example.ftp.ThreadPoolFTP - Command connection established: /127.0.0.1
+2025-07-22 11:30:44 [main] INFO  org.example.ftp.ThreadPoolFTP - Waiting for command connection...
+2025-07-22 11:30:56 [main] INFO  org.example.ftp.ThreadPoolFTP - Command connection established: /127.0.0.1
+2025-07-22 11:30:56 [main] INFO  org.example.ftp.ThreadPoolFTP - Waiting for command connection...
+2025-07-22 15:15:14 [main] INFO  org.example.ftp.SingleClientFTP - Server is listening on COMMAND_PORT=5001 and DATA_PORT=5002
+2025-07-22 15:15:14 [main] INFO  org.example.ftp.SingleClientFTP - Waiting for command connection...
+2025-07-22 15:15:20 [main] INFO  org.example.ftp.SingleClientFTP - Command connection from: /127.0.0.1
+2025-07-22 15:17:26 [main] INFO  org.example.ftp.SingleClientFTP - Client session ended.
+2025-07-22 15:17:26 [main] INFO  org.example.ftp.SingleClientFTP - Waiting for command connection...

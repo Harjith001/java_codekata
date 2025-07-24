@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class MultiClientFTP extends FTPImplementation{
+public class MultiClientFTP{
 
     private static final int PORT = 5001;
     private static final String DIR = "server_directory";
@@ -22,9 +22,9 @@ public class MultiClientFTP extends FTPImplementation{
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 //clientSocket.getOutputStream().write("Connected to server. \n".getBytes());
-                new Thread(()->{
-                    handleClient(clientSocket);
-                }).start();
+                FTPHandler handler = new FTPHandler(clientSocket);
+                handler.run();
+
             }
         }
     }
