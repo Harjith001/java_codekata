@@ -4,16 +4,17 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 public class NioEchoServer implements EchoServer {
     private static final int PORT = 5001;
     private ServerSocketChannel serverChannel;
     private Selector selector;
     private boolean running = false;
-    private final ConcurrentHashMap<SocketChannel, ByteBuffer> pendingWrites = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<SocketChannel, ByteBuffer> readBuffers = new ConcurrentHashMap<>();
+    private final Map<SocketChannel, ByteBuffer> pendingWrites = new HashMap<>();
+    private final Map<SocketChannel, ByteBuffer> readBuffers = new HashMap<>();
 
 
     @Override
@@ -36,7 +37,7 @@ public class NioEchoServer implements EchoServer {
 
                 try {
                     if (key.isAcceptable()) {
-                        handleAccept(key);
+                        handleAccept();
                     } else if (key.isReadable()) {
                         handleRead(key);
                     } else if (key.isWritable()) {
@@ -49,7 +50,7 @@ public class NioEchoServer implements EchoServer {
         }
     }
 
-    private void handleAccept(SelectionKey key) throws IOException {
+    private void handleAccept() throws IOException {
         SocketChannel client = serverChannel.accept();
         client.configureBlocking(false);
         client.register(selector, SelectionKey.OP_READ);
@@ -58,7 +59,7 @@ public class NioEchoServer implements EchoServer {
 
     private void handleRead(SelectionKey key) throws IOException {
         SocketChannel client = (SocketChannel) key.channel();
-        ByteBuffer buffer = readBuffers.computeIfAbsent(client, ch -> ByteBuffer.allocate(8192)); // or use dynamic buffer
+        ByteBuffer buffer = readBuffers.computeIfAbsent(client, ch -> ByteBuffer.allocate(8192));
 
         ByteBuffer temp = ByteBuffer.allocate(4096);
         int bytesRead = client.read(temp);
