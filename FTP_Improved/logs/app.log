@@ -1,0 +1,14 @@
+2025-07-29 10:57:10 [main] INFO  org.example.connection.NIOServer - NIO FTP Server started on port 2121
+2025-07-29 10:57:16 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:40264
+2025-07-29 10:58:42 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:40264
+2025-07-29 11:09:56 [main] INFO  org.example.connection.NIOServer - NIO FTP Server started on port 2121
+2025-07-29 11:10:01 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:54310
+2025-07-29 11:10:41 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:54310
+2025-07-29 11:29:35 [main] INFO  org.example.connection.NIOServer - NIO FTP Server started on port 2121
+2025-07-29 11:29:37 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:42806
+2025-07-29 11:30:02 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:42806
+2025-07-29 15:15:30 [main] INFO  org.example.connection.NIOServer - NIO FTP Server started on port 2121
+2025-07-29 15:15:44 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:32950
+2025-07-29 15:17:50 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:32950
+2025-07-29 15:20:05 [main] INFO  org.example.connection.NIOServer - NIO FTP Server started on port 2121
+2025-07-29 15:20:10 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:44700

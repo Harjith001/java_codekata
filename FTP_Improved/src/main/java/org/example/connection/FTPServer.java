@@ -1,5 +1,7 @@
 package org.example.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.example.command.FTPCommandExecutor;
 import org.example.parser.FTPCommandProcessor;
 
@@ -9,6 +11,7 @@ import java.net.Socket;
 
 public class FTPServer {
     private final int port;
+    private static final Logger LOG = (Logger) LogManager.getLogger(FTPServer.class);
 
     public FTPServer(int port) {
         this.port = port;
@@ -39,10 +42,16 @@ public class FTPServer {
 
             String line;
             while ((line = in.readLine()) != null) {
-                if (line.equalsIgnoreCase("QUIT")) {
+                String response = processor.process(line);
+
+                if (response.equals("QUIT")) {
                     break;
                 }
-                String response = processor.process(line);
+                int length = response.length();
+
+                out.write("Content-Length : "+ length);
+                out.newLine();
+
                 out.write(response);
                 out.newLine();
                 out.flush();
@@ -50,7 +59,7 @@ public class FTPServer {
 
             System.out.println("Client disconnected.");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Client connection IO Exception{}", e.getMessage());
         }
     }
 
