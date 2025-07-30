@@ -3,7 +3,6 @@ package org.example.connection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.example.parser.FTPCommandProcessor;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -28,7 +27,6 @@ public class ClientSession {
     private String uploadFilename;
     private int expectedFileSize;
     private int receivedFileBytes = 0;
-    private ByteArrayOutputStream fileDataStream;
 
     private static final int MAX_COMMAND_SIZE = 8192;
     private static final int MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
@@ -48,17 +46,6 @@ public class ClientSession {
     public void expandCommandBuffer(int minCapacity) {
         int newCapacity = Math.min(readBuffer.capacity() * 2, MAX_COMMAND_SIZE);
         if (newCapacity < minCapacity) {
-            newCapacity = minCapacity;
-        }
-        ByteBuffer newBuffer = ByteBuffer.allocate(newCapacity);
-        readBuffer.flip();
-        newBuffer.put(readBuffer);
-        readBuffer = newBuffer;
-    }
-
-    public void expandFileBuffer(int minCapacity) {
-        int newCapacity = Math.min(readBuffer.capacity() * 2, MAX_FILE_SIZE);
-        if (newCapacity < minCapacity && minCapacity <= MAX_FILE_SIZE) {
             newCapacity = minCapacity;
         }
         ByteBuffer newBuffer = ByteBuffer.allocate(newCapacity);

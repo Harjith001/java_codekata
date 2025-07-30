@@ -777,3 +777,15 @@ java.io.IOException: Session error
 	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35) [junit-rt.jar:?]
 	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:231) [junit-rt.jar:?]
 	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55) [junit-rt.jar:?]
+2025-07-30 14:22:18 [main] INFO  org.example.connection.NIOServer - NIO FTP Server started on port 2121
+2025-07-30 14:22:25 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:38814
+2025-07-30 14:22:41 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:38814
+2025-07-30 14:22:42 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:55620
+2025-07-30 14:22:51 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:55620
+2025-07-30 14:22:53 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:46918
+2025-07-30 14:23:13 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:46918
+2025-07-30 14:31:50 [main] INFO  org.example.connection.NIOServer - NIO FTP Server started on port 2121
+2025-07-30 14:31:54 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:36008
+2025-07-30 14:32:01 [main] INFO  org.example.connection.NIOServer - New client connected: /127.0.0.1:36010
+2025-07-30 14:32:50 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:36010
+2025-07-30 14:32:53 [main] INFO  org.example.connection.NIOServer - Closing connection: /127.0.0.1:36008
