@@ -81,30 +81,25 @@ public class NIOServer {
         SocketChannel client = (SocketChannel) key.channel();
         ClientSession session = clientSessions.get(client);
 
-        ByteBuffer buffer = session.getReadBuffer();
-        int bytesRead = client.read(buffer);
+        int bytesRead = client.read(session.getReadBuffer());
 
         if (bytesRead == -1) {
             closeConnection(key);
             return;
         }
 
-        if (bytesRead == 0) {
-            return;
-        }
-
-        // Handle binary file upload mode
         if (session.isReceivingFile()) {
             handleFileUpload(session, key);
             return;
         }
 
+        ByteBuffer buffer = session.getReadBuffer();
         buffer.flip();
+
 
         while (buffer.hasRemaining()) {
             int newlinePos = findNewline(buffer);
             if (newlinePos == -1) {
-                // Expand buffer if needed for large commands
                 if (buffer.remaining() >= session.getMaxCommandSize()) {
                     LOG.warn("Max command size reached without newline from {}", client.getRemoteAddress());
                     closeConnection(key);
@@ -120,7 +115,7 @@ public class NIOServer {
 
             byte[] lineBytes = new byte[newlinePos];
             buffer.get(lineBytes);
-            buffer.get(); // consume newline
+            buffer.get();
 
             String command = new String(lineBytes).trim();
             processCommand(session, key, command);
@@ -130,26 +125,26 @@ public class NIOServer {
 
     private void handleFileUpload(ClientSession session, SelectionKey key) throws IOException {
         ByteBuffer buffer = session.getReadBuffer();
+        int bytesAvailable = buffer.position();
+        int bytesNeeded = session.getExpectedFileSize() - session.getReceivedFileBytes();
+        int bytesToRead = Math.min(bytesAvailable, bytesNeeded);
+
         buffer.flip();
+        buffer.limit(buffer.position() + bytesToRead);
 
-        int remaining = session.getExpectedFileSize() - session.getReceivedFileBytes();
-        int toRead = Math.min(remaining, buffer.remaining());
-
-        byte[] data = new byte[toRead];
-        buffer.get(data);
-        session.appendFileData(data);
+        byte[] chunk = new byte[bytesToRead];
+        buffer.get(chunk);
+        session.appendFileData(chunk);
 
         buffer.compact();
 
         if (session.getReceivedFileBytes() >= session.getExpectedFileSize()) {
-            // File upload complete
             String response = session.completeFileUpload();
             String fullResponse = response + "\r\n";
             session.getWriteQueue().add(ByteBuffer.wrap(fullResponse.getBytes()));
             key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
         }
     }
-
     private void processCommand(ClientSession session, SelectionKey key, String command) {
         try {
             String response = session.getProcessor().process(command, session);
@@ -160,7 +155,6 @@ public class NIOServer {
             }
 
             if ("file_upload_ready".equals(response)) {
-                // Command was a PUT command, now waiting for file data
                 String ackResponse = "150 Ready to receive file data\r\n";
                 session.getWriteQueue().add(ByteBuffer.wrap(ackResponse.getBytes()));
                 key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);

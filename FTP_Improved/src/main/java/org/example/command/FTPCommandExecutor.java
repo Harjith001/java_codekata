@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
 public class FTPCommandExecutor extends FTPCommandBaseVisitor<String> {
-    private static final String SERVER_DIR = "server_directory";
+    public static final String SERVER_DIR = "server_directory";
     private boolean isLoggedIn = false;
     private static final Logger LOG = (Logger) LogManager.getLogger(FTPCommandExecutor.class);
     private static final String CRLF = "\r\n";
