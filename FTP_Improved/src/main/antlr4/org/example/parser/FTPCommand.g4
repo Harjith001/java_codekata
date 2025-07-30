@@ -7,7 +7,7 @@ start
 command
     : LIST
     | GET filename
-    | PUT filename content
+    | PUT filename length
     | LOGIN username password
     | QUIT
     ;
@@ -15,14 +15,14 @@ command
 filename: WORD;
 username: WORD;
 password: WORD;
-content: STRING;
+length: NUMBER;
 
 LIST: 'LIST';
 GET: 'GET';
 PUT: 'PUT';
 LOGIN: 'LOGIN';
 QUIT: 'QUIT';
-STRING: '"' ( ~["\\] | '\\' . )* '"';
 
+NUMBER: [0-9]+;
 WORD: [a-zA-Z0-9_.-]+;
 WS: [ \t\r\n]+ -> skip;

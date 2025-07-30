@@ -70,6 +70,11 @@ public class NIOServer {
         clientSessions.put(client, session);
 
         LOG.info("New client connected: {}", client.getRemoteAddress());
+
+        // Send welcome message
+        String welcome = "220 FTP Server Ready\r\n";
+        session.getWriteQueue().add(ByteBuffer.wrap(welcome.getBytes()));
+        client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
     private void handleRead(SelectionKey key) throws IOException {
@@ -88,18 +93,26 @@ public class NIOServer {
             return;
         }
 
+        // Handle binary file upload mode
+        if (session.isReceivingFile()) {
+            handleFileUpload(session, key);
+            return;
+        }
+
         buffer.flip();
 
         while (buffer.hasRemaining()) {
             int newlinePos = findNewline(buffer);
             if (newlinePos == -1) {
-                if (buffer.remaining() >= 65536) {
-                    LOG.warn("Max buffer size reached without newline from {}", client.getRemoteAddress());
+                // Expand buffer if needed for large commands
+                if (buffer.remaining() >= session.getMaxCommandSize()) {
+                    LOG.warn("Max command size reached without newline from {}", client.getRemoteAddress());
                     closeConnection(key);
                     return;
                 }
                 if (buffer.remaining() > buffer.capacity() - buffer.position()) {
-                    session.expandBuffer(buffer.position() + buffer.remaining());
+                    session.expandCommandBuffer(buffer.position() + buffer.remaining());
+                    buffer = session.getReadBuffer();
                 }
                 buffer.compact();
                 return;
@@ -107,7 +120,7 @@ public class NIOServer {
 
             byte[] lineBytes = new byte[newlinePos];
             buffer.get(lineBytes);
-            buffer.get();
+            buffer.get(); // consume newline
 
             String command = new String(lineBytes).trim();
             processCommand(session, key, command);
@@ -115,12 +128,42 @@ public class NIOServer {
         buffer.compact();
     }
 
+    private void handleFileUpload(ClientSession session, SelectionKey key) throws IOException {
+        ByteBuffer buffer = session.getReadBuffer();
+        buffer.flip();
+
+        int remaining = session.getExpectedFileSize() - session.getReceivedFileBytes();
+        int toRead = Math.min(remaining, buffer.remaining());
+
+        byte[] data = new byte[toRead];
+        buffer.get(data);
+        session.appendFileData(data);
+
+        buffer.compact();
+
+        if (session.getReceivedFileBytes() >= session.getExpectedFileSize()) {
+            // File upload complete
+            String response = session.completeFileUpload();
+            String fullResponse = response + "\r\n";
+            session.getWriteQueue().add(ByteBuffer.wrap(fullResponse.getBytes()));
+            key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+        }
+    }
+
     private void processCommand(ClientSession session, SelectionKey key, String command) {
         try {
-            String response = session.getProcessor().process(command);
+            String response = session.getProcessor().process(command, session);
 
             if ("abort".equals(response)) {
                 closeConnection(key);
+                return;
+            }
+
+            if ("file_upload_ready".equals(response)) {
+                // Command was a PUT command, now waiting for file data
+                String ackResponse = "150 Ready to receive file data\r\n";
+                session.getWriteQueue().add(ByteBuffer.wrap(ackResponse.getBytes()));
+                key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
                 return;
             }
 
@@ -177,12 +220,14 @@ public class NIOServer {
 
     private void closeConnection(SelectionKey key) {
         SocketChannel client = (SocketChannel) key.channel();
+        clientSessions.remove(client);
         try {
             LOG.info("Closing connection: {}", client.getRemoteAddress());
             client.close();
         } catch (IOException e) {
             LOG.error("Error closing connection", e);
         }
+        key.cancel();
     }
 
     public void stop() throws IOException {
