@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.example.command.FTPCommandExecutor;
+import org.example.connection.ClientSession;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -16,14 +17,17 @@ public class FTPCommandProcessor {
         this.executor = executor;
     }
 
-    public String process(String input) throws IOException {
+    public String process(String input, ClientSession session) throws IOException {
         CharStream charStream = CharStreams.fromReader(new StringReader(input));
         FTPCommandLexer lexer = new FTPCommandLexer(charStream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         FTPCommandParser parser = new FTPCommandParser(tokens);
         ParseTree tree = parser.command();
 
-        return executor.execute(tree);
+        return executor.execute(tree, session);
     }
 
+    public String saveFile(String filename, byte[] data) throws IOException {
+        return executor.saveFile(filename, data);
+    }
 }
